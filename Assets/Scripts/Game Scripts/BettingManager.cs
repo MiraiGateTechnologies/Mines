@@ -36,6 +36,17 @@ public class BettingManager : MonoBehaviour
         {21, 3.39f}, {22, 3.96f}, {23, 4.75f}, {24, 5.94f}
     };
 
+    public float p_BetAmount
+    {
+        get
+        {
+            return betAmount;
+        }
+        set
+        {
+
+        }
+    }
     private void Start()
     {
         UpdateBalanceText();

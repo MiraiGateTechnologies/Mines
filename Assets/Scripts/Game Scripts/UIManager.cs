@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -126,8 +127,18 @@ public class UIManager : MonoBehaviour
     public Sprite AutoManualDisabledSprite;
     public Button manualButton;
 
+    public UnityAction disableUIWhenGameStarted;
+    public UnityAction EnableUIWhenGameEnded;
+
+
     string currentMultiplierNumber;
     #endregion References 
+
+
+    #region Properties
+
+
+    #endregion Properties
 
     #region Awake and Start
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -150,6 +161,14 @@ public class UIManager : MonoBehaviour
         SpawnMultiplierValuePanels(multiplierValuePanelNumber);
         UpdateMaxMinesCountDisplay(); // Initial display update
         InitializeButtons();
+
+        disableUIWhenGameStarted += DisableBetAmntButtons;
+        disableUIWhenGameStarted += DisableCatfishDirectSetButtons;
+        disableUIWhenGameStarted += DisableMinesCountButtons;
+
+        EnableUIWhenGameEnded += EnableMinesCountButtons;
+        EnableUIWhenGameEnded += EnableBetAmntButtons;
+        EnableUIWhenGameEnded += EnableCatfishDirectSetButtons;
     }
     #endregion Awake and Start
 
@@ -209,6 +228,34 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.autoBetManager.StartAutoBet();
     }
+
+    public void StopAtAnyWinEnable()
+    {
+        stopAtAnyWin.image.sprite = stopAtWinTrue;
+    }
+
+    public void StopAtAnyWinDisable()
+    {
+        stopAtAnyWin.image.sprite = stopAtWinFalse;
+    }
+
+    public void AutoBetUiInteractableSet(bool enable)
+    {
+        stopAtAnyWin.interactable=enable;
+        whenLosingIncrease.interactable = enable;
+        whenWinningIncrease.interactable = enable;
+        numberOfRounds.interactable = enable;
+    }
+    public void StopAutoPlayButtonSet(bool enable)
+    {
+        stopAutoPlay.gameObject.SetActive(enable);
+    }
+
+    public void StartAutoPlaySet(bool enable)
+    {
+        startAutoPlay.gameObject.SetActive(enable);
+    }
+        
 
     #endregion Auto Bet Functionality
 

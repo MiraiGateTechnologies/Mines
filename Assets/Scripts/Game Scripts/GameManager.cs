@@ -18,6 +18,19 @@ public class GameManager : MonoBehaviour
     public bool gameStarted=false;
     public int totalMinesCount=5;
     public bool gameOver;
+    public bool _gameUIDisableEnable;
+    public bool gameUIDisableEnable
+    {
+        get
+        {
+            return _gameUIDisableEnable;
+        }
+
+        set
+        {
+
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////         Singleton Pattern          ////////////////////////////////
@@ -91,10 +104,10 @@ public class GameManager : MonoBehaviour
 
         gameStarted = false;
 
-        characterGenerator.history.Clear();
-       // minesManager.ShowAllItems();
-
+        // minesManager.ShowAllItems();
+        UIManager.Instance.autoBetButton.interactable = true;
         UIManager.Instance.ShowStartButton(true);
+        UIManager.Instance.ShowCancelButton(false);
         UIManager.Instance.ShowCashOutButton(false);
 
         UIManager.Instance.EnableMinesCountButtons();
@@ -104,7 +117,6 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.EnableCatfishDirectSetButtons();
         UIManager.Instance.ResetSwipeCountDisplay();
 
-        CatfishManager.Instance.ResetProfileIndex();
         ResetMinesTracker();
        // minesManager.ResetTotalMinesCount();
         BettingManager.Instance.ResetTotalWinnings();

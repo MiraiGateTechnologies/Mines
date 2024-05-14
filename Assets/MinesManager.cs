@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +12,7 @@ public class MinesManager : MonoBehaviour
     public int totalMines=5;
     public float multiplierIncrementValue=0.08f;
     int totalObjects = 25;
-    List<GridItem> allGridItems = new List<GridItem>();
+    public List<GridItem> allGridItems = new List<GridItem>();
     public static MinesManager Instance;
     public static float multiplierIncrement=0.08f;
 
@@ -39,6 +38,19 @@ public class MinesManager : MonoBehaviour
         }
         PlaceMinesRandomly();
     }
+
+    public void InstantiateWithoutDelay()
+    {
+        for (int i = 0; i < totalObjects; i++)
+        {
+            GameObject newInstance = Instantiate(gridItemPrefab, gridParent.transform);
+            newInstance.name = "gridItem" + i; // Optional: Name the instantiated object for easier identification
+            allGridItems.Add(newInstance.GetComponent<GridItem>());
+            GameManager.InstantiatedGridObjects.Add(newInstance);
+        }
+        PlaceMinesRandomly();
+    }
+
     public void PlaceMinesRandomly()
     {
         foreach (var item in allGridItems)//Ensuring that these elements are not mine
@@ -75,11 +87,14 @@ public class MinesManager : MonoBehaviour
     }
     public void DestroyAllTheObjects()
     {
-        foreach (var item in allGridItems)
+        if (allGridItems.Count > 0)
         {
-            Destroy(item.gameObject);
+            foreach (var item in allGridItems)
+            {
+                Destroy(item.gameObject);
+            }
+            allGridItems.Clear();
         }
-        allGridItems.Clear();
     }
 
     public void HandleIfMinesDisclosed(GameObject minesObject, Image mineImage)
@@ -140,6 +155,14 @@ public class MinesManager : MonoBehaviour
     public void DisableAllObjects()
     {
        foreach(var items in allGridItems)
+        {
+            items.GetComponent<Button>().interactable = false;
+        }
+    }
+
+    public void SetInteractableOffGridItems()
+    {
+        foreach (var items in allGridItems)
         {
             items.GetComponent<Button>().interactable = false;
         }

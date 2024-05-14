@@ -9730,7 +9730,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &633500404
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9815,7 +9815,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9a09f5c88eaa14b40a77ff560032b249, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 77e6c41944700914d9e9c9b06cde268d, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -10654,8 +10654,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.8946699}
-  m_AnchoredPosition: {x: 0, y: 1.0075684}
-  m_SizeDelta: {x: 0, y: 2.0151}
+  m_AnchoredPosition: {x: 0, y: 7.85376}
+  m_SizeDelta: {x: 0, y: 15.708}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &647530522
 MonoBehaviour:
@@ -10702,12 +10702,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 647530520}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Content: {fileID: 1247224183}
+  m_Content: {fileID: 800310786}
   m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 2
@@ -10715,7 +10715,7 @@ MonoBehaviour:
   m_Inertia: 1
   m_DecelerationRate: 0.135
   m_ScrollSensitivity: 1
-  m_Viewport: {fileID: 0}
+  m_Viewport: {fileID: 1247224183}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
   m_HorizontalScrollbarVisibility: 0
@@ -12645,7 +12645,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4326712961479187779}
   - {fileID: 1340235511}
   - {fileID: 933542592}
   - {fileID: 1631039390}
@@ -12667,12 +12666,13 @@ RectTransform:
   - {fileID: 265195743}
   - {fileID: 693025350}
   - {fileID: 333590140}
+  - {fileID: 4326712961479187779}
   m_Father: {fileID: 1247224183}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -195.38062}
-  m_SizeDelta: {x: 0, y: 292.066}
+  m_AnchoredPosition: {x: 0, y: -275.2588}
+  m_SizeDelta: {x: 0, y: 550.5172}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &800310787
 MonoBehaviour:
@@ -18303,7 +18303,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1149459940
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19944,6 +19944,7 @@ MonoBehaviour:
   totalCoins: 0
   totalMines: 5
   multiplierIncrementValue: 0.08
+  allGridItems: []
 --- !u!4 &1224897422
 Transform:
   m_ObjectHideFlags: 0
@@ -20166,6 +20167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1247224183}
+  - component: {fileID: 1247224184}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -20190,9 +20192,23 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -68}
-  m_SizeDelta: {x: 0, y: 265.29}
+  m_AnchoredPosition: {x: 0, y: -11.337769}
+  m_SizeDelta: {x: 0, y: 22.676}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1247224184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247224182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 0
 --- !u!1 &1249512579
 GameObject:
   m_ObjectHideFlags: 0
@@ -22246,6 +22262,7 @@ MonoBehaviour:
   gameStarted: 0
   totalMinesCount: 5
   gameOver: 0
+  _gameUIDisableEnable: 0
 --- !u!4 &1445499208
 Transform:
   m_ObjectHideFlags: 0
@@ -28496,6 +28513,7 @@ MonoBehaviour:
   autoBetStarted: 0
   roundWinStatus: 1
   winAmount: 0
+  _newSession: 0
 --- !u!1 &1917486058
 GameObject:
   m_ObjectHideFlags: 0
