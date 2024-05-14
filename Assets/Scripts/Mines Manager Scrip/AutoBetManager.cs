@@ -122,6 +122,8 @@ public class AutoBetManager : MonoBehaviour
             selectedGridElements.Clear();
             GameManager.InstantiatedGridObjects.Clear();
         }
+        StopAutoBet();
+        MinesManager.Instance.InstantiateWithoutDelay();
     }
 
     public void StopAutoBet()
@@ -143,6 +145,7 @@ public class AutoBetManager : MonoBehaviour
         UIManager.Instance.ResetMultiplierPanelsToDefault();
         UIManager.Instance.UpdateMultiplierPanels();
         UIManager.Instance.EnableUIWhenGameEnded.Invoke();
+
 
     }
 
@@ -183,6 +186,29 @@ public class AutoBetManager : MonoBehaviour
             if(p_StopAtWinClicked==true)
             {
                 StopAutoBet();
+            }
+            if(UIManager.Instance.IncreaseWhenWinningEnabled==true)
+            {
+                var TempBetAmount = BettingManager.Instance.betAmount;
+                TempBetAmount += (BettingManager.Instance.betAmount * UIManager.Instance.IncreaseWhenWinningValue) / 100;
+                if(TempBetAmount < BettingManager.Instance.balanceAmount)
+                {
+                    BettingManager.Instance.betAmount= TempBetAmount;
+                    BettingManager.Instance.UpdateBetAmountIfIncrease(TempBetAmount);
+                }
+            }
+        }
+        else
+        {
+            if (UIManager.Instance.IncreaseWhenLosingEnabled == true)
+            {
+                var TempBetAmount = BettingManager.Instance.betAmount;
+                TempBetAmount += (BettingManager.Instance.betAmount * UIManager.Instance.IncreaseWhenLosingValue) / 100;
+                if (TempBetAmount < BettingManager.Instance.balanceAmount)
+                {
+                    BettingManager.Instance.betAmount = TempBetAmount;
+                    BettingManager.Instance.UpdateBetAmountIfIncrease(TempBetAmount);
+                }
             }
         }
     }

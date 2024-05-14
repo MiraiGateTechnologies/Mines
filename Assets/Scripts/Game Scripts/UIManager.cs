@@ -130,6 +130,11 @@ public class UIManager : MonoBehaviour
     public UnityAction disableUIWhenGameStarted;
     public UnityAction EnableUIWhenGameEnded;
 
+    public bool IncreaseWhenWinningEnabled = false;
+    public bool IncreaseWhenLosingEnabled = false;
+
+    public float IncreaseWhenWinningValue;
+    public float IncreaseWhenLosingValue;
 
     string currentMultiplierNumber;
     #endregion References 
@@ -161,6 +166,9 @@ public class UIManager : MonoBehaviour
         SpawnMultiplierValuePanels(multiplierValuePanelNumber);
         UpdateMaxMinesCountDisplay(); // Initial display update
         InitializeButtons();
+        AutoBetUiInteractableSet(false);
+        whenWinningReset.image.color= Color.black;
+        whenLosingReset.image.color= Color.black;
 
         disableUIWhenGameStarted += DisableBetAmntButtons;
         disableUIWhenGameStarted += DisableCatfishDirectSetButtons;
@@ -186,6 +194,46 @@ public class UIManager : MonoBehaviour
         {
             StartAutoPlayButtonPressed();
         });
+
+        stopAutoPlay.onClick.AddListener(() =>
+        {
+            StopAutoPlayPressed();
+        });
+        manualButton.onClick.AddListener(() =>
+        {
+            ManualButtonPressed();
+        });
+        whenWinningIncrease.onClick.AddListener(() =>
+        {
+            WhenWinningIncreasePressed();
+        });
+        whenWinningReset.onClick.AddListener(() =>
+        {
+            WhenWinningResetPressed();
+        });
+        whenLosingIncrease.onClick.AddListener(() =>
+        {
+            WhenLosingIncreasePressed();
+        });
+        whenLosingReset.onClick.AddListener(() =>
+        {
+            WhenLosingResetPressed();
+        });
+        whenWinningIncreaseBy.onValueChanged.AddListener(value =>
+        {
+            float.TryParse(value, out IncreaseWhenWinningValue);
+        });
+        whenLosingIncreaseBy.onValueChanged.AddListener(value =>
+        {
+            float.TryParse(value, out IncreaseWhenLosingValue); 
+        });
+        stopAtAnyWin.onClick.AddListener(() =>
+        {
+            if(GameManager.Instance.autoBetManager.p_StopAtWinClicked==false)
+            GameManager.Instance.autoBetManager.p_StopAtWinClicked = true;
+            if (GameManager.Instance.autoBetManager.p_StopAtWinClicked == true)
+                GameManager.Instance.autoBetManager.p_StopAtWinClicked = false;
+        });
         cashOutButton.onClick.AddListener(() => OnCashOutButtonPressed());
         setCatfishTo3Button.onClick.AddListener(() => SetMinesCount(7));
         setCatfishTo5Button.onClick.AddListener(() => SetMinesCount(10));
@@ -202,19 +250,27 @@ public class UIManager : MonoBehaviour
     }
     void AutoBetButtonPressed()
     {
-        HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
-        autoBetButton.image.sprite=AutoManualEnabledSprite;
-        manualButton.image.sprite=AutoManualDisabledSprite;
+        MinesManager.Instance.DestroyAllTheObjects();
+        AutoBetUiInteractableSet(true);
+        HighlightMultiplierPanel(currentMultiplierIndex);
+        autoBetButton.image.sprite = AutoManualEnabledSprite;
+        manualButton.image.sprite = AutoManualDisabledSprite;
         GameManager.Instance.autoBet = true;
+
+        autoBetButton.image.sprite = AutoManualEnabledSprite;
+        manualButton.image.sprite = AutoManualDisabledSprite;
+        manualButton.interactable = true;
+        autoBetButton.interactable = false;
+
 
         startButton.gameObject.SetActive(false);
         startAutoPlay.gameObject.SetActive(true);
         startAutoPlay.interactable = false;
         MinesManager.Instance.InstantiateGridObjects();
 
-        DisableMinesCountButtons();
-        DisableBetAmntButtons();
-        DisableCatfishDirectSetButtons();
+        /*        DisableMinesCountButtons();
+                DisableBetAmntButtons();
+                DisableCatfishDirectSetButtons();*/
 
         UpdateRiskPercentageDisplay();
 
@@ -226,6 +282,7 @@ public class UIManager : MonoBehaviour
 
     void StartAutoPlayButtonPressed()
     {
+        GameManager.Instance.autoBetManager.p_NewAutoBetSession = true;
         GameManager.Instance.autoBetManager.StartAutoBet();
     }
 
@@ -241,10 +298,12 @@ public class UIManager : MonoBehaviour
 
     public void AutoBetUiInteractableSet(bool enable)
     {
-        stopAtAnyWin.interactable=enable;
+        stopAtAnyWin.interactable = enable;
         whenLosingIncrease.interactable = enable;
         whenWinningIncrease.interactable = enable;
         numberOfRounds.interactable = enable;
+        whenWinningReset.interactable = enable;
+        whenLosingReset.interactable = enable;
     }
     public void StopAutoPlayButtonSet(bool enable)
     {
@@ -255,7 +314,54 @@ public class UIManager : MonoBehaviour
     {
         startAutoPlay.gameObject.SetActive(enable);
     }
-        
+
+    public void StopAutoPlayPressed()
+    {
+        GameManager.Instance.autoBetManager.StopAutoBet();
+    }
+
+    public void ManualButtonPressed()
+    {
+        manualButton.interactable = false;
+        AutoBetUiInteractableSet(false);
+        manualButton.image.sprite = AutoManualEnabledSprite;
+        autoBetButton.image.sprite = AutoManualDisabledSprite;
+        autoBetButton.interactable = true;
+        StartAutoPlaySet(false);
+        MinesManager.Instance.DestroyAllTheObjects();
+        GameManager.Instance.autoBet = false;
+        ShowStartButton(true);
+    }
+
+    public void WhenWinningIncreasePressed()
+    {
+        whenWinningIncreaseBy.interactable = true;
+        whenWinningIncrease.image.color = Color.black;
+        whenWinningReset.image.color = Color.white;
+        IncreaseWhenWinningEnabled = true;
+    }
+    public void WhenWinningResetPressed()
+    {
+        whenWinningIncreaseBy.interactable = false;
+        whenWinningIncrease.image.color = Color.white;
+        whenWinningReset.image.color = Color.black;
+        IncreaseWhenWinningEnabled = false;
+    }
+    public void WhenLosingIncreasePressed()
+    {
+        whenLosingIncreaseBy.interactable = true;
+        whenLosingIncrease.image.color = Color.black;
+        whenLosingReset.image.color = Color.white;
+        IncreaseWhenLosingEnabled = true;
+    }
+
+    public void WhenLosingResetPressed()
+    {
+        whenLosingIncreaseBy.interactable = false;
+        whenLosingIncrease.image.color = Color.white;
+        whenLosingReset.image.color = Color.black;
+        IncreaseWhenLosingEnabled = false;
+    }
 
     #endregion Auto Bet Functionality
 
@@ -565,14 +671,15 @@ public class UIManager : MonoBehaviour
     public void OnAutoWin()
     {
         cashOutSound.Play();
+        bettingManager.UpdateToBeAddedAmntText(GameManager.Instance.autoBetManager.winAmount);
         winPercentText.text = "+" + CalculateWinPercent(GameManager.Instance.autoBetManager.winAmount, bettingManager.betAmount);
         lastMultiplierText.text = currentMultiplierNumber;
         bettingManager.CashOutWinnings();
         UpdateAndShowWinPanel();
-
+/*
         bettingManager.ResetMultipliers(); // Reset the multipliers
         ResetMultiplierPanelsToDefault(); // Reset UI panels to default
-        UpdateMultiplierPanels(); // Update the UI to reflect the reset
+        UpdateMultiplierPanels(); // Update the UI to reflect the reset*/
     }
     public void OnCashOutButtonPressed() //To be called when Cashout button is clicked
     {
@@ -591,7 +698,7 @@ public class UIManager : MonoBehaviour
         MinesManager.Instance.DestroyAllTheObjects();
         bettingManager.betAmountInput.readOnly = false;
         bettingManager.CashOutWinnings();
-
+        autoBetButton.interactable = true;
         ShowCashOutButton(false);
         ShowStartButton(true);
         ShowCancelButton(false);

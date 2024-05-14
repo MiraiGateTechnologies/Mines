@@ -122,6 +122,10 @@ public class BettingManager : MonoBehaviour
     {
         betAmountInput.text = betAmount.ToString("0.00");
     }
+    public void UpdateBetAmountIfIncrease(float amount)
+    {
+        betAmountInput.text = amount.ToString();
+    }
     public void UpdateBalanceText()
     {
         balanceText.text = balanceAmount.ToString("0.00");
