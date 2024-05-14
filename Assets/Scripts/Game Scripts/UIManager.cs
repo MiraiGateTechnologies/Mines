@@ -231,7 +231,7 @@ public class UIManager : MonoBehaviour
         {
             if(GameManager.Instance.autoBetManager.p_StopAtWinClicked==false)
             GameManager.Instance.autoBetManager.p_StopAtWinClicked = true;
-            if (GameManager.Instance.autoBetManager.p_StopAtWinClicked == true)
+            else if (GameManager.Instance.autoBetManager.p_StopAtWinClicked == true)
                 GameManager.Instance.autoBetManager.p_StopAtWinClicked = false;
         });
         cashOutButton.onClick.AddListener(() => OnCashOutButtonPressed());
@@ -607,6 +607,7 @@ public class UIManager : MonoBehaviour
     ///////////////////  Start - Cancel - Cashout Btns on-click methods  ////////////////////
     public void OnStartButtonPressed() //To be called when Start button is clicked
     {
+        MinesManager.Instance.DestroyAllTheObjects();
         // Play the button click sound
         if (startButtonSound != null)
         {

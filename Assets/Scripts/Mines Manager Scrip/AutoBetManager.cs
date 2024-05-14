@@ -200,6 +200,8 @@ public class AutoBetManager : MonoBehaviour
         }
         else
         {
+            BettingManager.Instance.balanceAmount -= BettingManager.Instance.betAmount;
+            BettingManager.Instance.UpdateBalanceText();
             if (UIManager.Instance.IncreaseWhenLosingEnabled == true)
             {
                 var TempBetAmount = BettingManager.Instance.betAmount;
