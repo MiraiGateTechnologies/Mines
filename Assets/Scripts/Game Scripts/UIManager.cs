@@ -284,6 +284,7 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.autoBetManager.p_NewAutoBetSession = true;
         GameManager.Instance.autoBetManager.StartAutoBet();
+        bettingManager.betAmountInput.interactable = false;
     }
 
     public void StopAtAnyWinEnable()
@@ -689,6 +690,7 @@ public class UIManager : MonoBehaviour
                 {
                     startButtonSound.Play();
                 }*/
+
         MinesManager.Instance.DisableAllObjects();
         cashOutSound.Play();
         winPercentText.text= "+"+CalculateWinPercent(bettingManager.totalWinnings, bettingManager.betAmount) +"%";

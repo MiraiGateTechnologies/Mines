@@ -128,6 +128,7 @@ public class AutoBetManager : MonoBehaviour
 
     public void StopAutoBet()
     {
+        BettingManager.Instance.betAmountInput.interactable = true;
         p_NewAutoBetSession = false;
         IndexOfSelectedElements.Clear();
         UIManager.Instance.AutoBetUiInteractableSet(true);
@@ -150,20 +151,45 @@ public class AutoBetManager : MonoBehaviour
     }
 
     public void AddBetElements(GameObject gridGameObject, int index)
-    { 
-        IndexOfSelectedElements.Add(index);
-        gridGameObject.GetComponent<Button>().interactable = false;
-        UIManager.Instance.currentMultiplierIndex++;
-        UIManager.Instance.CheckAndAdjustMultiplierPanels();
-        UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
-        GameManager.Instance.diamondsOpened++;
+    {
+        if (GameManager.Instance.diamondsOpened < (25 - MinesManager.Instance.totalMines))
+        {
+            gridGameObject.GetComponent<GridItem>().selectedForAuto = true;
+            gridGameObject.GetComponent<GridItem>().autoImage.gameObject.SetActive(true);
+            IndexOfSelectedElements.Add(index);
+            //gridGameObject.GetComponent<Button>().interactable = false;
+            UIManager.Instance.currentMultiplierIndex++;
+            UIManager.Instance.CheckAndAdjustMultiplierPanels();
+            UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
+            GameManager.Instance.diamondsOpened++;
 
-        float baseMultiplier = BettingManager.Instance.minesMultipliers[MinesManager.Instance.totalMines];
-        float incrementedMultiplier = baseMultiplier + (GameManager.Instance.diamondsOpened) * MinesManager.multiplierIncrement;
-        Debug.Log("Current Multiplier = " + incrementedMultiplier);
-        winnings=incrementedMultiplier;
+
+            float baseMultiplier = BettingManager.Instance.minesMultipliers[MinesManager.Instance.totalMines];
+            float incrementedMultiplier = baseMultiplier + (GameManager.Instance.diamondsOpened) * MinesManager.multiplierIncrement;
+            Debug.Log("Current Multiplier = " + incrementedMultiplier);
+            winnings = incrementedMultiplier;
+
+        }
 
     //    selectedGridElements.Add(gridGameObject);
+    }
+    public void RemoveBetELements(GameObject gridGameObject, int index) 
+    {
+        if (GameManager.Instance.diamondsOpened < (25 - MinesManager.Instance.totalMines))
+        {
+            gridGameObject.GetComponent<GridItem>().autoImage.gameObject.SetActive(false);
+            gridGameObject.GetComponent<GridItem>().selectedForAuto = false;
+            IndexOfSelectedElements.Remove(index);
+            UIManager.Instance.currentMultiplierIndex--;
+            UIManager.Instance.CheckAndAdjustMultiplierPanels();
+            UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
+            GameManager.Instance.diamondsOpened--;
+
+            float baseMultiplier = BettingManager.Instance.minesMultipliers[MinesManager.Instance.totalMines];
+            float decrementMultiplier = (GameManager.Instance.diamondsOpened) * MinesManager.multiplierIncrement - baseMultiplier;
+            winnings = decrementMultiplier;
+
+        }
     }
 
     public void AddElementsSelectedToList()

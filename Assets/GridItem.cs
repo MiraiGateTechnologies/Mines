@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,7 @@ public class GridItem : MonoBehaviour
     public List<Image> diamondImage;
     public Image autoImage;
     public bool isMine;
-
+    public bool selectedForAuto = false;
     public int randomIndex;
     public static bool buttonClicked;
     private void Start()
@@ -32,6 +33,12 @@ public class GridItem : MonoBehaviour
                 GameManager.Instance.minesManager.HandleIfDiamondDisclosed(this.gameObject, diamondImage[randomIndex]);
             }
         }
+        else if(selectedForAuto==true)
+        {
+            GameManager.Instance.autoBetManager.RemoveBetELements(this.gameObject, GameManager.InstantiatedGridObjects.IndexOf(this.gameObject));
+/*            autoImage.gameObject.SetActive(false);*/
+
+        }
         else
         {
             if(GameManager.Instance.gameStarted == false)
@@ -39,8 +46,9 @@ public class GridItem : MonoBehaviour
                 GameManager.Instance.gameStarted = true;
                 UIManager.Instance.EnableStartAutoPlayButton();
             }
-            autoImage.gameObject.SetActive(true);
+/*            autoImage.gameObject.SetActive(true);*/
             GameManager.Instance.autoBetManager.AddBetElements(this.gameObject,GameManager.InstantiatedGridObjects.IndexOf(this.gameObject));
+
 
         }
     }

@@ -99,7 +99,11 @@ public class MinesManager : MonoBehaviour
 
     public void HandleIfMinesDisclosed(GameObject minesObject, Image mineImage)
     {
-        DisableAllObjects();
+        if (!GameManager.Instance.gameStarted)
+        {
+            BettingManager.Instance.balanceAmount -= BettingManager.Instance.betAmount;
+        }
+            DisableAllObjects();
         mineImage.GetComponentInParent<Button>().interactable = false;
         mineImage.gameObject.SetActive(true);
 
