@@ -78,6 +78,8 @@ public class AutoBetManager : MonoBehaviour
     {
         while (!stopRequested)
         {
+            BettingManager.Instance.balanceAmount -= BettingManager.Instance.betAmount;
+            BettingManager.Instance.UpdateBalanceText();
             GameManager.Instance.minesManager.InstantiateWithoutDelay();//Instantiate elements
 
             yield return new WaitForSeconds(0.4f); // Adjust time as needed

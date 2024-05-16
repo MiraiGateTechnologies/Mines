@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 234543370, guid: f40f5fb035d77ef44af33bcb10eb5707, type: 3}
+  m_Sprite: {fileID: -1387949724, guid: 35fdbadefa251d4469c769e069693ba3, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -319,6 +319,7 @@ MonoBehaviour:
   - {fileID: 5698764864407172467}
   autoImage: {fileID: 1751563058259595175}
   isMine: 0
+  selectedForAuto: 0
   randomIndex: 0
 --- !u!1 &6210463565244197065
 GameObject:

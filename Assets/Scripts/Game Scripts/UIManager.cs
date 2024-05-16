@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -104,6 +105,7 @@ public class UIManager : MonoBehaviour
     [Header("10. Other References")]
     public int currentMultiplierIndex = 0;
     private List<GameObject> instantiatedPanels = new List<GameObject>();
+    private int instantiatedPanelsEnabledCount = 5;
 
     [Header("11. Win Panel and Text")]
     public Image winPanelImage;
@@ -126,6 +128,10 @@ public class UIManager : MonoBehaviour
     public Sprite AutoManualEnabledSprite;
     public Sprite AutoManualDisabledSprite;
     public Button manualButton;
+    public Sprite resetOffSprite;
+    public Sprite resetOnSprite;
+    public Sprite IncreaseOffSprite;
+    public Sprite IncreaseOnSprite;
 
     public UnityAction disableUIWhenGameStarted;
     public UnityAction EnableUIWhenGameEnded;
@@ -235,9 +241,9 @@ public class UIManager : MonoBehaviour
                 GameManager.Instance.autoBetManager.p_StopAtWinClicked = false;
         });
         cashOutButton.onClick.AddListener(() => OnCashOutButtonPressed());
-        setCatfishTo3Button.onClick.AddListener(() => SetMinesCount(7));
-        setCatfishTo5Button.onClick.AddListener(() => SetMinesCount(10));
-        setCatfishTo10Button.onClick.AddListener(() => SetMinesCount(15));
+        setCatfishTo3Button.onClick.AddListener(() => SetMinesCount(3));
+        setCatfishTo5Button.onClick.AddListener(() => SetMinesCount(5));
+        setCatfishTo10Button.onClick.AddListener(() => SetMinesCount(10));
         setCatfishTo20Button.onClick.AddListener(() => SetMinesCount(20));
     }
     #endregion Initialize On Click Buttons Listeners
@@ -323,6 +329,10 @@ public class UIManager : MonoBehaviour
 
     public void ManualButtonPressed()
     {
+        BettingManager.Instance.ResetTotalWinnings();
+        BettingManager.Instance.ResetMultipliers();
+        UIManager.Instance.ResetMultiplierPanelsToDefault();
+        GameManager.Instance.gameStarted = false;
         manualButton.interactable = false;
         AutoBetUiInteractableSet(false);
         manualButton.image.sprite = AutoManualEnabledSprite;
@@ -337,30 +347,30 @@ public class UIManager : MonoBehaviour
     public void WhenWinningIncreasePressed()
     {
         whenWinningIncreaseBy.interactable = true;
-        whenWinningIncrease.image.color = Color.black;
-        whenWinningReset.image.color = Color.white;
+        whenWinningIncrease.image.sprite = IncreaseOnSprite;
+        whenWinningReset.image.sprite = resetOffSprite;
         IncreaseWhenWinningEnabled = true;
     }
     public void WhenWinningResetPressed()
     {
         whenWinningIncreaseBy.interactable = false;
-        whenWinningIncrease.image.color = Color.white;
-        whenWinningReset.image.color = Color.black;
+        whenWinningIncrease.image.sprite = IncreaseOffSprite;
+        whenWinningReset.image.sprite = resetOnSprite;
         IncreaseWhenWinningEnabled = false;
     }
     public void WhenLosingIncreasePressed()
     {
         whenLosingIncreaseBy.interactable = true;
-        whenLosingIncrease.image.color = Color.black;
-        whenLosingReset.image.color = Color.white;
+        whenLosingIncrease.image.sprite = IncreaseOnSprite;
+        whenLosingReset.image.sprite = resetOffSprite;
         IncreaseWhenLosingEnabled = true;
     }
 
     public void WhenLosingResetPressed()
     {
         whenLosingIncreaseBy.interactable = false;
-        whenLosingIncrease.image.color = Color.white;
-        whenLosingReset.image.color = Color.black;
+        whenLosingIncrease.image.sprite = IncreaseOffSprite;
+        whenLosingReset.image.sprite = resetOnSprite;
         IncreaseWhenLosingEnabled = false;
     }
 
@@ -427,7 +437,7 @@ public class UIManager : MonoBehaviour
     }
     public void DecreaseMaxMinesCount()
     {
-        if (GameManager.Instance.totalMinesCount > 5)
+        if (GameManager.Instance.totalMinesCount > 2)
         {
             GameManager.Instance.totalMinesCount--;
             MinesManager.Instance.updateTotalMinesCount(GameManager.Instance.totalMinesCount);
@@ -451,7 +461,7 @@ public class UIManager : MonoBehaviour
         maxCatfishCountText.text = $"{GameManager.Instance.totalMinesCount}";
 
         increaseCatfishCountButton.interactable = GameManager.Instance.totalMinesCount < 24;
-        decreaseCatfishCountButton.interactable = GameManager.Instance.totalMinesCount > 5;
+        decreaseCatfishCountButton.interactable = GameManager.Instance.totalMinesCount > 2;
     }
     public void DisableMinesCountButtons()
     {
@@ -674,7 +684,7 @@ public class UIManager : MonoBehaviour
     {
         cashOutSound.Play();
         bettingManager.UpdateToBeAddedAmntText(GameManager.Instance.autoBetManager.winAmount);
-        winPercentText.text = "+" + CalculateWinPercent(GameManager.Instance.autoBetManager.winAmount, bettingManager.betAmount);
+        winPercentText.text = "+" + CalculateWinPercent(GameManager.Instance.autoBetManager.winAmount, bettingManager.betAmount)+"%";
         lastMultiplierText.text = currentMultiplierNumber;
         bettingManager.CashOutWinnings();
         UpdateAndShowWinPanel();
@@ -745,9 +755,42 @@ public class UIManager : MonoBehaviour
             instantiatedPanels.Add(panel);
         }
     }
+    public void DisableInstantiatedPanels(int count)
+    {
+        if (instantiatedPanelsEnabledCount > count)
+        {
+            instantiatedPanelsEnabledCount = count;
+            for (int i = instantiatedPanels.Count - 1; i >= count; i--)
+            {
+                instantiatedPanels[i].GetComponent<Image>().enabled = false;
+                instantiatedPanels[i].GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+
+            }
+
+        }
+        else
+        {
+            for(int i = 0;i<count; i++)
+            {
+                instantiatedPanels[i].GetComponent<Image>().enabled = true;
+                instantiatedPanels[i].GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+            }
+            instantiatedPanelsEnabledCount = count;
+        
+        }
+    }
+    public void CheckAndEnableInstantiatedPanels(int count)
+    {
+        for (int i = count - 1; i < 5; i++)
+        {
+            instantiatedPanels[i].GetComponent<Image>().enabled = true;
+            instantiatedPanels[i].GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+        }
+        instantiatedPanelsEnabledCount = 5;
+    }
     public void UpdateMultiplierPanels()
     {
-        for (int i = 0; i < instantiatedPanels.Count; i++)
+        for (int i = 0; i < instantiatedPanelsEnabledCount; i++)
         {
             TextMeshProUGUI textComponent = instantiatedPanels[i].GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null)

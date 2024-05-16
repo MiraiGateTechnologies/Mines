@@ -29,11 +29,12 @@ public class BettingManager : MonoBehaviour
 
     public Dictionary<int, float> minesMultipliers = new Dictionary<int, float>()
     {
-        {5, 1.03f}, {6, 1.08f}, {7, 1.13f}, {8, 1.19f},
-        {9, 1.25f}, {10, 1.32f}, {11, 1.40f}, {12, 1.48f},
-        {13, 1.58f}, {14, 1.70f}, {15, 1.83f}, {16, 1.98f},
-        {17, 2.16f}, {18, 2.38f}, {19, 2.64f}, {20, 2.97f},
-        {21, 3.39f}, {22, 3.96f}, {23, 4.75f}, {24, 5.94f}
+        {2, 1.03f}, {3, 1.08f}, {4, 1.13f}, {5, 1.19f},
+        {6, 1.25f}, {7, 1.32f}, {8, 1.40f}, {9, 1.48f},
+        {10, 1.58f}, {11, 1.70f}, {12, 1.83f}, {13, 1.98f},
+        {14, 2.16f}, {15, 2.38f}, {16, 2.64f}, {17, 2.97f},
+        {18, 3.39f}, {19, 3.96f}, {20, 4.75f}, {21, 5.94f},
+        {22, 7.92f}, {23,11.88f}, {24,23.75f}
     };
 
     public float p_BetAmount
@@ -197,10 +198,19 @@ public class BettingManager : MonoBehaviour
         float baseMultiplier = minesMultipliers[currentMinesCount];
         nextMultipliers.Clear(); // Clear the list before adding new values
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < (25 - MinesManager.Instance.totalMines); i++)
         {
             float multiplier = baseMultiplier + (i * MinesManager.Instance.multiplierIncrementValue);
             nextMultipliers.Add(multiplier);
+        }
+        if(nextMultipliers.Count < 5)
+        {
+
+            UIManager.Instance.DisableInstantiatedPanels(nextMultipliers.Count);
+        }
+        else
+        {
+          //  UIManager.Instance.CheckAndEnableInstantiatedPanels(nextMultipliers.Count);
         }
 
         // Debug log to verify the calculations
