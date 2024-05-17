@@ -7,7 +7,9 @@ public class GridItem : MonoBehaviour
 {
     public Button gridButton;
     public Image mineImage;
-    public List<Image> diamondImage;
+    public Image BgImage;
+   // public List<Image> diamondImage;
+    public Image pinkDiamond;
     public Image autoImage;
     public bool isMine;
     public bool selectedForAuto = false;
@@ -29,7 +31,7 @@ public class GridItem : MonoBehaviour
             }
             else
             {
-                GameManager.Instance.minesManager.HandleIfDiamondDisclosed(this.gameObject, diamondImage[randomIndex]);
+                GameManager.Instance.minesManager.HandleIfDiamondDisclosed(this.gameObject, pinkDiamond);
             }
         }
         else if(selectedForAuto==true)
@@ -50,5 +52,9 @@ public class GridItem : MonoBehaviour
 
 
         }
+    }
+    public void ChangeSpriteToHighlighted()
+    {
+        BgImage.sprite=UIManager.Instance.HighlightedBoxSprite;
     }
 }

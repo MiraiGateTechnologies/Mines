@@ -313,10 +313,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridButton: {fileID: 8904203157818403884}
   mineImage: {fileID: 2723754515616194267}
-  diamondImage:
-  - {fileID: 5409611325949883857}
-  - {fileID: 7434908523491089639}
-  - {fileID: 5698764864407172467}
+  BgImage: {fileID: 70777737283712448}
+  pinkDiamond: {fileID: 5698764864407172467}
   autoImage: {fileID: 1751563058259595175}
   isMine: 0
   selectedForAuto: 0

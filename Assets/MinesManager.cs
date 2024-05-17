@@ -15,6 +15,7 @@ public class MinesManager : MonoBehaviour
     public List<GridItem> allGridItems = new List<GridItem>();
     public static MinesManager Instance;
     public static float multiplierIncrement=0.08f;
+    public float winningsInManual = 0;
 
     private void Awake()
     {
@@ -22,7 +23,7 @@ public class MinesManager : MonoBehaviour
     }
     public void InstantiateGridObjects()
     {
-        StartCoroutine(InstantiateWithADelay());
+       InstantiateWithoutDelay();
     }
 
     IEnumerator InstantiateWithADelay()
@@ -81,7 +82,7 @@ public class MinesManager : MonoBehaviour
             }
             else
             {
-                item.diamondImage[item.randomIndex].gameObject.SetActive(true);
+                item.pinkDiamond.gameObject.SetActive(true);
             }
         }
     }
@@ -94,6 +95,7 @@ public class MinesManager : MonoBehaviour
                 Destroy(item.gameObject);
             }
             allGridItems.Clear();
+            GameManager.InstantiatedGridObjects.Clear();
         }
     }
 
@@ -137,9 +139,10 @@ public class MinesManager : MonoBehaviour
         UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
 
         float baseMultiplier = BettingManager.Instance.minesMultipliers[totalMines];
-        float incrementedMultiplier = baseMultiplier + (GameManager.Instance.diamondsOpened) * multiplierIncrement;
+        float incrementedMultiplier = baseMultiplier + (GameManager.Instance.diamondsOpened-1) * multiplierIncrement;
+        winningsInManual = incrementedMultiplier;
+         float winnings = BettingManager.Instance.betAmount * incrementedMultiplier;
         Debug.Log("Multiplier Current = " + incrementedMultiplier);
-        float winnings = BettingManager.Instance.betAmount * incrementedMultiplier;
 /*        BettingManager.Instance.ResetTotalWinnings();*/
 
         BettingManager.Instance.UpdateToBeAddedAmntText(winnings);

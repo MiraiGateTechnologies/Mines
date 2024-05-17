@@ -15,7 +15,7 @@ public class WinPanelFadeManager : MonoBehaviour
     private void Start()
     {
         winPanelCanvasGroup.alpha = 0; // Make the panel transparent
-        checkHistoryButton.interactable = false; // Initially, the button is not interactable
+       // checkHistoryButton.interactable = false; // Initially, the button is not interactable
     }
 
     public void ShowWinPanel()
@@ -45,7 +45,7 @@ public class WinPanelFadeManager : MonoBehaviour
         winPanelCanvasGroup.alpha = targetAlpha;
 
         // Update the interactability of the "check history" button
-        checkHistoryButton.interactable = (targetAlpha == 1.0f);
+       // checkHistoryButton.interactable = (targetAlpha == 1.0f);
         BettingManager.Instance.ResetTotalWinnings();
     }
 

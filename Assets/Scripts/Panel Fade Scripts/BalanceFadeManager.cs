@@ -15,6 +15,7 @@ public class BalanceFadeManager : MonoBehaviour
     {
         // Ensure the panel is transparent initially
         insufficientBalancePanel.color = new Color(insufficientBalancePanel.color.r, insufficientBalancePanel.color.g, insufficientBalancePanel.color.b, 0);
+        insufficientBalancePanel.gameObject.SetActive(false);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,6 +28,7 @@ public class BalanceFadeManager : MonoBehaviour
 
     private IEnumerator FadeInAndOut()
     {
+        insufficientBalancePanel.gameObject.SetActive(true);
         // Fade in effect
         float startTime = Time.time;
         while (Time.time - startTime < fadeDuration)
@@ -47,5 +49,6 @@ public class BalanceFadeManager : MonoBehaviour
             insufficientBalancePanel.color = new Color(insufficientBalancePanel.color.r, insufficientBalancePanel.color.g, insufficientBalancePanel.color.b, alpha);
             yield return null;
         }
+        insufficientBalancePanel.gameObject.SetActive(false);
     }
 }

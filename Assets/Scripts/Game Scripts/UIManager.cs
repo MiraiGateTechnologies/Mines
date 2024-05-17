@@ -132,6 +132,7 @@ public class UIManager : MonoBehaviour
     public Sprite resetOnSprite;
     public Sprite IncreaseOffSprite;
     public Sprite IncreaseOnSprite;
+    public Sprite HighlightedBoxSprite;
 
     public UnityAction disableUIWhenGameStarted;
     public UnityAction EnableUIWhenGameEnded;
@@ -173,8 +174,7 @@ public class UIManager : MonoBehaviour
         UpdateMaxMinesCountDisplay(); // Initial display update
         InitializeButtons();
         AutoBetUiInteractableSet(false);
-        whenWinningReset.image.color= Color.black;
-        whenLosingReset.image.color= Color.black;
+
 
         disableUIWhenGameStarted += DisableBetAmntButtons;
         disableUIWhenGameStarted += DisableCatfishDirectSetButtons;
@@ -662,6 +662,7 @@ public class UIManager : MonoBehaviour
     }
     public void OnCancelButtonPressed() //To be called when Cancel button is clicked
     {
+        GameManager.Instance.minesManager.DestroyAllTheObjects();
         bettingManager.betAmountInput.readOnly = false;
         ShowAutoBetButton(true);
         ShowCancelButton(false);
@@ -671,7 +672,6 @@ public class UIManager : MonoBehaviour
         EnableBetAmntButtons();
         EnableCatfishDirectSetButtons();
 
-        GameManager.Instance.minesManager.DestroyAllTheObjects();
         ResetRiskPercentageDisplay();
         ResetSwipeCountDisplay();
 
@@ -685,7 +685,7 @@ public class UIManager : MonoBehaviour
         cashOutSound.Play();
         bettingManager.UpdateToBeAddedAmntText(GameManager.Instance.autoBetManager.winAmount);
         winPercentText.text = "+" + CalculateWinPercent(GameManager.Instance.autoBetManager.winAmount, bettingManager.betAmount)+"%";
-        lastMultiplierText.text = currentMultiplierNumber;
+        lastMultiplierText.text = GameManager.Instance.autoBetManager.winnings.ToString();
         bettingManager.CashOutWinnings();
         UpdateAndShowWinPanel();
 /*
@@ -704,7 +704,7 @@ public class UIManager : MonoBehaviour
         MinesManager.Instance.DisableAllObjects();
         cashOutSound.Play();
         winPercentText.text= "+"+CalculateWinPercent(bettingManager.totalWinnings, bettingManager.betAmount) +"%";
-        lastMultiplierText.text = currentMultiplierNumber;
+        lastMultiplierText.text = MinesManager.Instance.winningsInManual.ToString();
         //MinesManager.Instance.ResetTotalMinesCount();
         GameManager.Instance.ResetMinesTracker();
         SwipesTracker.Instance.ResetGameStartedFlag();
