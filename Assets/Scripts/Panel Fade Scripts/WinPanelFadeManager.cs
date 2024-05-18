@@ -10,7 +10,7 @@ public class WinPanelFadeManager : MonoBehaviour
     public TMP_Text WinAmountTxt;
     public Button checkHistoryButton; // Reference to the "check history" button
     public float fadeDuration = 1.0f;
-    public float stayDuration = 2.0f;
+    public float stayDuration = 1.0f;
 
     private void Start()
     {
@@ -46,7 +46,7 @@ public class WinPanelFadeManager : MonoBehaviour
 
         // Update the interactability of the "check history" button
        // checkHistoryButton.interactable = (targetAlpha == 1.0f);
-        BettingManager.Instance.ResetTotalWinnings();
+       // BettingManager.Instance.ResetTotalWinnings();
     }
 
     public void UpdateWinAmountText(string amount)

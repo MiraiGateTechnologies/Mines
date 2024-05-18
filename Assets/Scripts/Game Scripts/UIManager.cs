@@ -814,8 +814,8 @@ public class UIManager : MonoBehaviour
 
 
         // Add two new panels at the end
-        int startIndexForNewMultipliers = instantiatedPanels.Count + GameManager.Instance.diamondsOpened - 4; // Adjust based on current multiplier index
-        Debug.Log("start Index=" + startIndexForNewMultipliers);
+        int startIndexForNewMultipliers = instantiatedPanels.Count + GameManager.Instance.diamondsOpened - 3; // Adjust based on current multiplier index
+  
         for (int i = 0; i < 2; i++)
         {
             GameObject newPanel = Instantiate(multiplierValuePanelPrefab, multiplierPanelParent);
@@ -829,6 +829,41 @@ public class UIManager : MonoBehaviour
         }
 
     }
+    private void RecycleWhenDecrementMultiplier()
+    {
+        int startIndexForNewMultipliers = currentMultiplierIndex;
+        Debug.Log("start Index=" + startIndexForNewMultipliers);
+        Debug.Log("Current Multiplier Value = "+currentMultiplierIndex);
+        
+        for (int i = 0;i<2;i++)
+        {           
+                GameObject newPanel = Instantiate(multiplierValuePanelPrefab, multiplierPanelParent);
+                TextMeshProUGUI textComponent = newPanel.GetComponentInChildren<TextMeshProUGUI>();
+                if (textComponent != null && startIndexForNewMultipliers + i < bettingManager.nextMultipliers.Count)
+                {
+                    // Update the text with the next multiplier
+                    textComponent.text = $"x{bettingManager.nextMultipliers[startIndexForNewMultipliers+i]:F2}";
+                Debug.Log("StartIndex = " + startIndexForNewMultipliers);
+                }
+                // Set the sibling index to 0 to add the new panel at the beginning
+                newPanel.transform.SetSiblingIndex(i);
+               // instantiatedPanels.Insert(0, newPanel); // Update the list to reflect the new order
+            
+        }
+
+        int count = instantiatedPanels.Count;
+        /*currentMultiplierIndex += 2;*/
+        for(int i=count-1; i>=count-2; i--)
+        {
+            Destroy(instantiatedPanels[i].gameObject);
+            instantiatedPanels.RemoveAt(i);
+        }
+    }
+
+    public void CheckAndAdjustMultiplierPanelInAuto()
+    {
+
+    }
     public void CheckAndAdjustMultiplierPanels()//called in swipe tracker class whenever we right swipe
     {
         Debug.Log($"[CheckAndAdjustMultiplierPanels] Current Multiplier Index: {currentMultiplierIndex}, Panels Count: {instantiatedPanels.Count}");
@@ -840,6 +875,10 @@ public class UIManager : MonoBehaviour
             Debug.Log("[CheckAndAdjustMultiplierPanels] Adjusting Multiplier Panels due to reaching the threshold.");
             RecycleAndAddMultiplierPanels();
         }
+        else if(currentMultiplierIndex<=0)
+        {
+            RecycleWhenDecrementMultiplier();
+        }
         else
         {
             Debug.Log("[CheckAndAdjustMultiplierPanels] No adjustment needed at this time.");
@@ -847,8 +886,8 @@ public class UIManager : MonoBehaviour
     }
     public void HighlightMultiplierPanel(int currentMultiplierIndex)
     {
-        Color defaultTextColor = new Color32(0xE6, 0x49, 0x7E, 0xFF); // #E6497E
-        Color currentTextColor = Color.white; // #FFFFFF
+       // Color defaultTextColor = new Color32(0xE6, 0x49, 0x7E, 0xFF); // #E6497E
+       //olor currentTextColor = Color.white; // #FFFFFF
 
         // Iterate through all instantiated panels
         for (int i = 0; i < instantiatedPanels.Count; i++)
@@ -860,19 +899,25 @@ public class UIManager : MonoBehaviour
             if (i < currentMultiplierIndex)
             {
                 panelImage.sprite = previousMultiplierSprite;
-                //textComponent.color = defaultTextColor; // Set text color for previous multipliers
             }
             else if (i == currentMultiplierIndex)
             {
                 panelImage.sprite = currentMultiplierSprite;
                 currentMultiplierNumber = instantiatedPanels[i].GetComponentInChildren<TextMeshProUGUI>().text;
-                //textComponent.color = currentTextColor; // Set text color for the current multiplier
             }
             else
             {
                 panelImage.sprite = defaultMultiplierSprite;
-                //textComponent.color = defaultTextColor; // Set text color for future multipliers
             }
+        }
+    }
+    private void ResetMultiplierPanels()
+    {
+        // Reset all panels to the default state
+        for (int i = 0; i < instantiatedPanels.Count; i++)
+        {
+            Image panelImage = instantiatedPanels[i].GetComponent<Image>();
+            panelImage.sprite = defaultMultiplierSprite;
         }
     }
     public void ResetMultiplierPanelsToDefault()

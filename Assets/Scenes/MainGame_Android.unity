@@ -1806,7 +1806,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 265195742}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1820,8 +1820,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.26131508}
   m_AnchorMax: {x: 1, y: 0.31131506}
-  m_AnchoredPosition: {x: -0.0008544922, y: 45.087677}
-  m_SizeDelta: {x: -1.1700134, y: -3.5626984}
+  m_AnchoredPosition: {x: -0.0008544922, y: 45.087646}
+  m_SizeDelta: {x: -1.1699829, y: -3.5626984}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &265195744
 MonoBehaviour:
@@ -3489,6 +3489,7 @@ GameObject:
   - component: {fileID: 505992378}
   - component: {fileID: 505992377}
   - component: {fileID: 505992376}
+  - component: {fileID: 505992379}
   m_Layer: 5
   m_Name: Multiplier panel
   m_TagString: Untagged
@@ -3533,7 +3534,7 @@ MonoBehaviour:
     m_Top: 10
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: -71.3
+  m_Spacing: -70
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -3579,6 +3580,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 505992374}
   m_CullTransparentMesh: 1
+--- !u!114 &505992379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 505992374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 0
 --- !u!1 &512033183
 GameObject:
   m_ObjectHideFlags: 0
@@ -10791,7 +10806,7 @@ MonoBehaviour:
   resetOnSprite: {fileID: 21300000, guid: f328ff425cf2d4c4899a9f911b8fc3ca, type: 3}
   IncreaseOffSprite: {fileID: 21300000, guid: 267baa4bc446f4245b5d1af109e845c7, type: 3}
   IncreaseOnSprite: {fileID: 21300000, guid: 2f2ac22f3bd0bf5488655fc3e413b08f, type: 3}
-  HighlightedBoxSprite: {fileID: 21300000, guid: c3865c894911dc042b3d12f1a5138a5f, type: 3}
+  HighlightedBoxSprite: {fileID: 21300000, guid: ac62016f878b8da4389075b322f6c196, type: 3}
   IncreaseWhenWinningEnabled: 0
   IncreaseWhenLosingEnabled: 0
   IncreaseWhenWinningValue: 0

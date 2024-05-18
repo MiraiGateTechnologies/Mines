@@ -32,6 +32,7 @@ public class GridItem : MonoBehaviour
             else
             {
                 GameManager.Instance.minesManager.HandleIfDiamondDisclosed(this.gameObject, pinkDiamond);
+                BgImage.sprite = UIManager.Instance.HighlightedBoxSprite;
             }
         }
         else if(selectedForAuto==true)

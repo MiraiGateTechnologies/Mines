@@ -200,10 +200,10 @@ public class AutoBetManager : MonoBehaviour
             gridGameObject.GetComponent<GridItem>().autoImage.gameObject.SetActive(true);
             IndexOfSelectedElements.Add(index);
             //gridGameObject.GetComponent<Button>().interactable = false;
+            GameManager.Instance.diamondsOpened++;
             UIManager.Instance.currentMultiplierIndex++;
             UIManager.Instance.CheckAndAdjustMultiplierPanels();
             UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
-            GameManager.Instance.diamondsOpened++;
 
 
             float baseMultiplier = BettingManager.Instance.minesMultipliers[MinesManager.Instance.totalMines];
@@ -228,7 +228,9 @@ public class AutoBetManager : MonoBehaviour
             GameManager.Instance.diamondsOpened--;
 
             float baseMultiplier = BettingManager.Instance.minesMultipliers[MinesManager.Instance.totalMines];
-            float decrementMultiplier = (GameManager.Instance.diamondsOpened-1) * MinesManager.multiplierIncrement - baseMultiplier;
+            Debug.Log("<color:Green>Base Multiplier = </color>" + baseMultiplier);
+            float decrementMultiplier = baseMultiplier-(GameManager.Instance.diamondsOpened-1) * MinesManager.multiplierIncrement ;
+            Debug.Log("<color:REd>decrement Multiplier  = </color>" + decrementMultiplier);
             winnings = decrementMultiplier;
 
         }
