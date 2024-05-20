@@ -45,7 +45,7 @@ public class MinesManager : MonoBehaviour
         for (int i = 0; i < totalObjects; i++)
         {
             GameObject newInstance = Instantiate(gridItemPrefab, gridParent.transform);
-            newInstance.name = "gridItem" + i; // Optional: Name the instantiated object for easier identification
+            newInstance.name = "gridItem" + i; 
             allGridItems.Add(newInstance.GetComponent<GridItem>());
             GameManager.InstantiatedGridObjects.Add(newInstance);
         }

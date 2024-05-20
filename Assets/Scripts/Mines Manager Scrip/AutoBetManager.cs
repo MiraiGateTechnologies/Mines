@@ -92,6 +92,7 @@ public class AutoBetManager : MonoBehaviour
 
             BettingManager.Instance.UpdateBalanceText();
             GameManager.Instance.minesManager.InstantiateWithoutDelay();//Instantiate elements
+            MinesManager.Instance.SetInteractableOffGridItems();
 
             yield return new WaitForSeconds(0.4f); // Adjust time as needed
             MinesManager.Instance.ShowAllItems();//Reveal all the objects
@@ -102,7 +103,7 @@ public class AutoBetManager : MonoBehaviour
 
             autoPlayStart();// reveal all the objects and calculate total winnings
 
-            yield return new WaitForSeconds(2f); // Adjust time as needed
+            yield return new WaitForSeconds(1f); // Adjust time as needed
             GameManager.Instance.minesManager.DestroyAllTheObjects();
             selectedGridElements.Clear();
             GameManager.InstantiatedGridObjects.Clear();
@@ -137,7 +138,7 @@ public class AutoBetManager : MonoBehaviour
             
             {
                 GameManager.Instance.minesManager.InstantiateWithoutDelay();//Instantiate elements
-
+                MinesManager.Instance.SetInteractableOffGridItems();
                 yield return new WaitForSeconds(0.4f); // Adjust time as needed
 
                 AddElementsSelectedToList();
@@ -148,7 +149,7 @@ public class AutoBetManager : MonoBehaviour
                 autoPlayStart();// calculate total winnings
 
 
-                yield return new WaitForSeconds(2f); // Adjust time as needed
+                yield return new WaitForSeconds(1f); // Adjust time as needed
                 GameManager.Instance.minesManager.DestroyAllTheObjects();
                 selectedGridElements.Clear();
                 GameManager.InstantiatedGridObjects.Clear();
