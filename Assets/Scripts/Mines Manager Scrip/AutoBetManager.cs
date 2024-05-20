@@ -16,6 +16,7 @@ public class AutoBetManager : MonoBehaviour
     List<int> IndexOfSelectedElements=new List<int>();
     public float winAmount;
     public bool _newSession;
+    public int currentMultiplierInAuto = 0;
     public bool p_StopAtWinClicked
     {
         get
@@ -202,7 +203,9 @@ public class AutoBetManager : MonoBehaviour
             //gridGameObject.GetComponent<Button>().interactable = false;
             GameManager.Instance.diamondsOpened++;
             UIManager.Instance.currentMultiplierIndex++;
-            UIManager.Instance.CheckAndAdjustMultiplierPanels();
+           // UIManager.Instance.CheckAndAdjustMultiplierPanels();
+
+            UIManager.Instance.CheckAndAdjustMultiplierPanelInAuto();
             UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
 
 
@@ -223,9 +226,9 @@ public class AutoBetManager : MonoBehaviour
             gridGameObject.GetComponent<GridItem>().selectedForAuto = false;
             IndexOfSelectedElements.Remove(index);
             UIManager.Instance.currentMultiplierIndex--;
-            UIManager.Instance.CheckAndAdjustMultiplierPanels();
-            UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
             GameManager.Instance.diamondsOpened--;
+            UIManager.Instance.CheckAndAdjustMultiplierPanelInAuto();
+            UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
 
             float baseMultiplier = BettingManager.Instance.minesMultipliers[MinesManager.Instance.totalMines];
             Debug.Log("<color:Green>Base Multiplier = </color>" + baseMultiplier);
