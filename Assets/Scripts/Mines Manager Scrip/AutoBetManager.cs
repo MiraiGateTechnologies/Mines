@@ -229,6 +229,11 @@ public class AutoBetManager : MonoBehaviour
             GameManager.Instance.diamondsOpened--;
             UIManager.Instance.CheckAndAdjustMultiplierPanelInAuto();
             UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
+            if(GameManager.Instance.diamondsOpened<1)
+            {
+                UIManager.Instance.startAutoPlay.interactable = false;
+                GameManager.Instance.gameStarted = false;
+            }
 
             float baseMultiplier = BettingManager.Instance.minesMultipliers[MinesManager.Instance.totalMines];
             Debug.Log("<color:Green>Base Multiplier = </color>" + baseMultiplier);

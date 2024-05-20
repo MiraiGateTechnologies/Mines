@@ -210,7 +210,7 @@ public class BettingManager : MonoBehaviour
         }
         else
         {
-          //  UIManager.Instance.CheckAndEnableInstantiatedPanels(nextMultipliers.Count);
+            UIManager.Instance.CheckAndEnableInstantiatedPanels(nextMultipliers.Count);
         }
 
         // Debug log to verify the calculations

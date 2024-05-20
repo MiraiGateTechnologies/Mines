@@ -144,6 +144,7 @@ public class UIManager : MonoBehaviour
     public float IncreaseWhenLosingValue;
 
     string currentMultiplierNumber;
+    private float tolerance= 0.0001f;
     #endregion References 
 
 
@@ -855,11 +856,24 @@ public class UIManager : MonoBehaviour
 
         Debug.Log("CURRENT  MULTIPLIERRR = " + currentMultiplierIndex);
         string startString = instantiatedPanels[0].GetComponentInChildren<TextMeshProUGUI>().text;
+        Debug.Log("<color=red>Start Index = </color>" + startString);
         startString = startString.Substring(1);
         float startValue;
         float.TryParse(startString, out startValue);
-        int startindex = bettingManager.nextMultipliers.IndexOf(startValue)-2;
-
+        int temp = bettingManager.nextMultipliers.IndexOf(startValue);
+        if(temp == -1)
+        {
+            for (int i = 0; i < bettingManager.nextMultipliers.Count; i++)
+            {
+                if (Mathf.Abs((float)(bettingManager.nextMultipliers[i] - startValue)) < tolerance)
+                {
+                    temp = i;
+                    break;
+                }
+            }
+        }
+        int startindex = temp-2;
+        Debug.Log("<color=green>Start Index = </color>" + bettingManager.nextMultipliers.IndexOf(startValue));
         for (int i = 0; i < 2; i++)
         {
             GameObject newPanel = Instantiate(multiplierValuePanelPrefab, multiplierPanelParent);
