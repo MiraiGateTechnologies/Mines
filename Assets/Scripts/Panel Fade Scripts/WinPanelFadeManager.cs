@@ -44,9 +44,6 @@ public class WinPanelFadeManager : MonoBehaviour
 
         winPanelCanvasGroup.alpha = targetAlpha;
 
-        // Update the interactability of the "check history" button
-       // checkHistoryButton.interactable = (targetAlpha == 1.0f);
-       // BettingManager.Instance.ResetTotalWinnings();
     }
 
     public void UpdateWinAmountText(string amount)

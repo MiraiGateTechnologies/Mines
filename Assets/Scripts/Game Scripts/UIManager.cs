@@ -15,10 +15,8 @@ public class UIManager : MonoBehaviour
 
     [Header("1. Scripts References")]
     public BettingManager bettingManager;
-    private SwipeManager swipeManager;
     public BalanceFadeManager balanceFadeManager;
     public WinPanelFadeManager winPanelFadeManager;
-    public CharacterAssetManager characterAssetManager;
     public CharacterGenerator characterGenerator;
 
     [Header("2. Buttons")]
@@ -183,7 +181,9 @@ public class UIManager : MonoBehaviour
 
         EnableUIWhenGameEnded += EnableMinesCountButtons;
         EnableUIWhenGameEnded += EnableBetAmntButtons;
-        EnableUIWhenGameEnded += EnableCatfishDirectSetButtons;
+        EnableUIWhenGameEnded += EnableMinesDirectSetButtons;
+
+        manualButton.interactable = false;
     }
     #endregion Awake and Start
 
@@ -481,7 +481,7 @@ public class UIManager : MonoBehaviour
         setCatfishTo10Button.interactable = false;
         setCatfishTo20Button.interactable = false;
     }
-    public void EnableCatfishDirectSetButtons()
+    public void EnableMinesDirectSetButtons()
     {
         setCatfishTo3Button.interactable = true;
         setCatfishTo5Button.interactable = true;
@@ -515,83 +515,7 @@ public class UIManager : MonoBehaviour
     }
     #endregion Bet Amount Buttons
 
-    #region Like & Dislike Button Functionalities
-    ///////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////      Like & Disklike Btns      ////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////
 
-    ///////////////////////////  Like & Disklike interactivity  ///////////////////////////
-    public void DisableLikeDislikeButtons()
-    {
-        likeButton.interactable = false;
-        dislikeButton.interactable = false;
-    }
-    public void EnableLikeDislikeButtons()
-    {
-        likeButton.interactable = true;
-        dislikeButton.interactable = true;
-    }
-    /////////////////////////  Like & Disklike Btns swipe func //////////////////////////////
-
-    public void SetSwipeManager(SwipeManager manager)
-    {
-        swipeManager = manager;
-    }
-    public void UpdateSwipeManagerReference()
-    {
-        var swipeManagers = FindObjectsOfType<SwipeManager>();
-        if (swipeManagers.Length > 1) // Ensure not to select the one being destroyed
-        {
-            foreach (var manager in swipeManagers)
-            {
-                if (manager != swipeManager) // Assuming swipeManager is the current reference
-                {
-                    SetSwipeManager(manager);
-                    break;
-                }
-            }
-        }
-        else
-        {
-            // Handle the case where no other SwipeManager is available
-            // This could involve disabling the like/dislike buttons or other UI elements
-            DisableLikeDislikeButtons();
-        }
-    }
-    public void OnLikeButtonPressed()
-    {
-        if (swipeManager != null)
-        {
-            swipeManager.SwipeRight();
-        }
-        else
-        {
-            Debug.LogError("SwipeManager reference is null.");
-        }
-    }
-    public void OnDislikeButtonPressed()
-    {
-        swipeManager?.SwipeLeft();
-    }
-    public void ChangeLikeButtonSpriteAndSize(Sprite newSprite, Vector2 newSize)
-    {
-        likeButton.image.sprite = newSprite; // Change sprite
-        likeButton.GetComponent<RectTransform>().sizeDelta = newSize; // Change size
-    }
-    public void ChangeDislikeButtonSpriteAndSize(Sprite newSprite, Vector2 newSize)
-    {
-        dislikeButton.image.sprite = newSprite; // Change sprite
-        dislikeButton.GetComponent<RectTransform>().sizeDelta = newSize; // Change size
-    }
-    public void DisableDislikeButton()
-    {
-        dislikeButton.interactable = false;
-    }
-
-
-
-
-    #endregion Like & Dislike Button Functionalities
 
     #region Start - Cancel - Cashout Btn Functionalities
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -671,7 +595,7 @@ public class UIManager : MonoBehaviour
         ShowStartButton(true);
         EnableMinesCountButtons();
         EnableBetAmntButtons();
-        EnableCatfishDirectSetButtons();
+        EnableMinesDirectSetButtons();
 
         ResetRiskPercentageDisplay();
         ResetSwipeCountDisplay();
@@ -706,10 +630,10 @@ public class UIManager : MonoBehaviour
         cashOutSound.Play();
         winPercentText.text= "+"+CalculateWinPercent(bettingManager.totalWinnings, bettingManager.betAmount) +"%";
         lastMultiplierText.text = MinesManager.Instance.winningsInManual.ToString();
-        //MinesManager.Instance.ResetTotalMinesCount();
+
         GameManager.Instance.ResetMinesTracker();
-        SwipesTracker.Instance.ResetGameStartedFlag();
-        MinesManager.Instance.DestroyAllTheObjects();
+        GameManager.Instance.gameStarted = false;
+        MinesManager.Instance.ShowAllItems();
         bettingManager.betAmountInput.readOnly = false;
         bettingManager.CashOutWinnings();
         autoBetButton.interactable = true;
@@ -722,7 +646,7 @@ public class UIManager : MonoBehaviour
         //Buttons
         EnableMinesCountButtons();
         EnableBetAmntButtons();
-        EnableCatfishDirectSetButtons();
+        EnableMinesDirectSetButtons();
 
         ResetRiskPercentageDisplay();
         ResetSwipeCountDisplay();
@@ -973,86 +897,6 @@ public class UIManager : MonoBehaviour
     }
     #endregion Multiplier Panel Functionalities
 
-    #region History Panel Functionalities
-    ///////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////      History panel func      //////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////
-
-    public void ShowHistoryPanel()
-    {
-      //  historyPanel.gameObject.SetActive(true);
-      //  SpawnHistoryContainers();
-    }
-    public void HideHistoryPanel()
-    {
-        historyPanel.gameObject.SetActive(false);
-        ClearHistoryContainers();
-        SwipesTracker.Instance.ClearSwipeDecisions();
-    }
-    //--------------------------------------------------------------------------------------
-    private void SpawnHistoryContainers()
-    {
-        // Clear out any existing history containers first
-        foreach (Transform child in historyContainerParent)
-        {
-            Destroy(child.gameObject);
-        }
-
-        // Get the list of session images from CharacterGenerator and reverse it
-        List<Sprite> images = characterGenerator.GetSessionImages();
-        images.Reverse(); // Reverse the order of images
-
-        // Ensure there are 25 images
-        if (images.Count != 25)
-        {
-            Debug.LogError("The number of session images does not match the expected count (25).");
-            return;
-        }
-
-        // Get catfish decisions
-        List<string> catfishDecisions = CatfishManager.Instance.GetProfileDecisions();
-        if (catfishDecisions.Count != 25)
-        {
-            Debug.LogError("The number of catfish decisions does not match the expected count (25).");
-            return;
-        }
-
-        // Instantiate and set images and catfish decisions for history containers in reversed order
-        for (int i = 0; i < 25; i++)
-        {
-            GameObject container = Instantiate(historyContainerPrefab, historyContainerParent);
-            HistoryContainerPanel panel = container.GetComponent<HistoryContainerPanel>();
-            if (panel != null)
-            {
-                panel.womenImageHistory.sprite = images[i];
-                panel.catfishDecisionTxt.text = catfishDecisions[i];
-                panel.countTxt.text = (i + 1).ToString();// Set the count text for each panel
-
-                bool isCatfish = catfishDecisions[i] == "Catfish profile"; // Adjust this condition based on your actual decision texts
-                panel.SetCatfishDecisionPanel(isCatfish);
-                panel.SetCountPanel(isCatfish);
-                panel.SetTextColors(isCatfish);
-
-                // check if there's a swipe decision for this profile
-                bool? rightSwipe = i < SwipesTracker.Instance.swipeDecisions.Count ? (SwipesTracker.Instance.swipeDecisions[i] == "Right Swiped") : (bool?)null;
-                panel.SetSwipeDecisionImage(rightSwipe);
-
-                // Update the highlight panel with swipe and catfish status
-                bool hasBeenSwiped = rightSwipe.HasValue;
-                panel.UpdateHighlightPanel(hasBeenSwiped, isCatfish);
-                panel.UpdateSwipeDecisionPanelVisibility(hasBeenSwiped);
-            }
-        }
-    }
-    private void ClearHistoryContainers()
-    {
-        // Loop through all children of the historyContainerParent and destroy them
-        foreach (Transform child in historyContainerParent)
-        {
-            Destroy(child.gameObject);
-        }
-    }
-    #endregion History Panel Functionalities
 
     #region Other Dependent Methods
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -1069,7 +913,6 @@ public class UIManager : MonoBehaviour
             panelFadeOutManager.FadeInOut(winPanelImage, winPanelText);
             winPanelFadeManager.UpdateWinAmountText(winAmount);
             winPanelFadeManager.ShowWinPanel();
-           // bettingManager.ResetTotalWinnings();
         }
         else
         {

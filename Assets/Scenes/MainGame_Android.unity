@@ -4500,7 +4500,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 2068214972}
   m_TextViewport: {fileID: 852129758}
   m_TextComponent: {fileID: 296903790}
@@ -10648,7 +10648,6 @@ GameObject:
   - component: {fileID: 1445499208}
   - component: {fileID: 1445499207}
   - component: {fileID: 1445499210}
-  - component: {fileID: 1445499209}
   - component: {fileID: 1445499212}
   m_Layer: 0
   m_Name: GameManager
@@ -10695,25 +10694,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1445499209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1445499206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ae78e8b2bb2c5b439050c6f7b282352, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bettingManager: {fileID: 1445499212}
-  multiplierIncrement: 0.08
-  characterGenerator: {fileID: 0}
-  swipeDecisions: []
-  catfishDecisions: []
-  namesHistory: []
-  descriptionHistory: []
 --- !u!114 &1445499210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10729,7 +10709,6 @@ MonoBehaviour:
   bettingManager: {fileID: 1445499212}
   balanceFadeManager: {fileID: 133264318}
   winPanelFadeManager: {fileID: 133264319}
-  characterAssetManager: {fileID: 0}
   characterGenerator: {fileID: 0}
   likeButton: {fileID: 0}
   dislikeButton: {fileID: 0}
@@ -13215,6 +13194,8 @@ MonoBehaviour:
   roundWinStatus: 1
   winAmount: 0
   _newSession: 0
+  currentMultiplierInAuto: 0
+  balanceFadeManager: {fileID: 133264318}
 --- !u!1 &1917486058
 GameObject:
   m_ObjectHideFlags: 0
@@ -14357,7 +14338,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 2068214972}
   m_TextViewport: {fileID: 654737039}
   m_TextComponent: {fileID: 1676045029}

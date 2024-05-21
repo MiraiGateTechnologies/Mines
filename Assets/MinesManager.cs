@@ -21,23 +21,12 @@ public class MinesManager : MonoBehaviour
     {
         Instance = this;
     }
+
+    #region Instantiating Grid Items and Placing them randomly
+
     public void InstantiateGridObjects()
     {
        InstantiateWithoutDelay();
-    }
-
-    IEnumerator InstantiateWithADelay()
-    {
-        for (int i = 0; i < totalObjects; i++)
-        {
-            GameObject newInstance = Instantiate(gridItemPrefab, gridParent.transform);
-            newInstance.name = "gridItem" + i; // Optional: Name the instantiated object for easier identification
-            allGridItems.Add(newInstance.GetComponent<GridItem>());
-            GameManager.InstantiatedGridObjects.Add(newInstance);
-            // Wait for the specified delay
-            yield return new WaitForSeconds(Seconds); // Convert milliseconds to seconds
-        }
-        PlaceMinesRandomly();
     }
 
     public void InstantiateWithoutDelay()
@@ -71,6 +60,8 @@ public class MinesManager : MonoBehaviour
             allGridItems[randomIndex].isMine = true;
         }
     }
+
+    #endregion Instantiating Grid Items and Placing them randomly
 
     public void ShowAllItems()
     {
@@ -123,7 +114,6 @@ public class MinesManager : MonoBehaviour
             UIManager.Instance.ShowCashOutButton(true);
             BettingManager.Instance.balanceAmount -= BettingManager.Instance.betAmount;
             BettingManager.Instance.UpdateBalanceText();
-            /*BettingManager.Instance.ResetTotalWinnings();*/
         }
         if(GameManager.Instance.diamondsOpened==(25-totalMines))
         {
@@ -141,9 +131,8 @@ public class MinesManager : MonoBehaviour
         float baseMultiplier = BettingManager.Instance.minesMultipliers[totalMines];
         float incrementedMultiplier = baseMultiplier + (GameManager.Instance.diamondsOpened-1) * multiplierIncrement;
         winningsInManual = incrementedMultiplier;
-         float winnings = BettingManager.Instance.betAmount * incrementedMultiplier;
+        float winnings = BettingManager.Instance.betAmount * incrementedMultiplier;
         Debug.Log("Multiplier Current = " + incrementedMultiplier);
-/*        BettingManager.Instance.ResetTotalWinnings();*/
 
         BettingManager.Instance.UpdateToBeAddedAmntText(winnings);
 
@@ -167,11 +156,4 @@ public class MinesManager : MonoBehaviour
         }
     }
 
-    public void SetInteractableOffGridItems()
-    {
-        foreach (var items in allGridItems)
-        {
-            items.GetComponent<Button>().interactable = false;
-        }
-    }
 }

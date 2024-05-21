@@ -198,11 +198,13 @@ public class BettingManager : MonoBehaviour
         float baseMultiplier = minesMultipliers[currentMinesCount];
         nextMultipliers.Clear(); // Clear the list before adding new values
 
-        for (int i = 0; i < (25 - MinesManager.Instance.totalMines); i++)
+        for (int i = 0; i < (MinesManager.Instance.allGridItems.Count - MinesManager.Instance.totalMines); i++)
         {
             float multiplier = baseMultiplier + (i * MinesManager.Instance.multiplierIncrementValue);
             nextMultipliers.Add(multiplier);
         }
+
+        //Disabling panels if we increase number of mines
         if(nextMultipliers.Count < 5)
         {
 
@@ -220,8 +222,8 @@ public class BettingManager : MonoBehaviour
     {
         // Reset the multipliers to their initial state or any desired state
         nextMultipliers.Clear();
-        // Optionally, re-calculate or re-initialize the multipliers as needed
-        CalculateNextMultipliers(); // If you want to reset to the initial state of multipliers
+
+        CalculateNextMultipliers();
     }
 
 }

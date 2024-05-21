@@ -8,7 +8,6 @@ public class GridItem : MonoBehaviour
     public Button gridButton;
     public Image mineImage;
     public Image BgImage;
-   // public List<Image> diamondImage;
     public Image pinkDiamond;
     public Image autoImage;
     public bool isMine;
@@ -32,16 +31,16 @@ public class GridItem : MonoBehaviour
             else
             {
                 GameManager.Instance.minesManager.HandleIfDiamondDisclosed(this.gameObject, pinkDiamond);
-                BgImage.sprite = UIManager.Instance.HighlightedBoxSprite;
+                ChangeSpriteToHighlighted();
             }
         }
-        else if(selectedForAuto==true)
+        else if(selectedForAuto==true)//DESELECT PREVIOUSLY SELECTED BUTTONS
         {
             GameManager.Instance.autoBetManager.RemoveBetELements(this.gameObject, GameManager.InstantiatedGridObjects.IndexOf(this.gameObject));
-/*            autoImage.gameObject.SetActive(false);*/
+
 
         }
-        else
+        else//SELECT BUTTONS
         {
             if(GameManager.Instance.gameStarted == false)
             {
@@ -54,6 +53,10 @@ public class GridItem : MonoBehaviour
 
         }
     }
+
+    /// <summary>
+    /// HIGHLIGHT SELECTED GRID ITEM IN AUTO AS WELL AS MANUAL
+    /// </summary>
     public void ChangeSpriteToHighlighted()
     {
         BgImage.sprite=UIManager.Instance.HighlightedBoxSprite;

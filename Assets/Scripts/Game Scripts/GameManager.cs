@@ -19,18 +19,6 @@ public class GameManager : MonoBehaviour
     public int totalMinesCount=5;
     public bool gameOver;
     public bool _gameUIDisableEnable;
-    public bool gameUIDisableEnable
-    {
-        get
-        {
-            return _gameUIDisableEnable;
-        }
-
-        set
-        {
-
-        }
-    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////         Singleton Pattern          ////////////////////////////////
@@ -61,37 +49,7 @@ public class GameManager : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(gameObject);
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////   Creates a new character card and initializes it with generated character data    ////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    [ContextMenu("generateNewCharacter")]    
-    public void GenerateNewCards(int numberOfCards)
-    {
-        characterGenerator.usedImageIds.Clear();
-        for (int i = 0; i < numberOfCards; i++)
-        {
-            GameObject newCharacterBody = Instantiate(characterBodyPrefab, characterBG.transform);
-            CharacterBodyHolder characterBodyHolder = newCharacterBody.GetComponent<CharacterBodyHolder>();
-
-            characterGenerator.SetPlaceHolders(characterBodyHolder.WomenImage.gameObject);
-
-            /*characterGenerator.GenerateNewCharacter();*/
-            characterGenerator.GenerateNewCharacter(characterBodyHolder);
-
-            // Assuming each newCharacterBody GameObject has a SwipeManager component
-            SwipeManager swipeManager = newCharacterBody.GetComponent<SwipeManager>();
-            if (swipeManager != null)
-            {
-                // Update the UIManager with the new SwipeManager reference
-                UIManager.Instance.SetSwipeManager(swipeManager);
-            }
-            else
-            {
-                Debug.LogError("SwipeManager component not found on the newly instantiated character.");
-            }
-        }
-    }
     public void GameOver()
     {
         Debug.Log("Game Over");
@@ -104,7 +62,6 @@ public class GameManager : MonoBehaviour
 
         gameStarted = false;
 
-        // minesManager.ShowAllItems();
         UIManager.Instance.autoBetButton.interactable = true;
         UIManager.Instance.ShowStartButton(true);
         UIManager.Instance.ShowCancelButton(false);
@@ -113,20 +70,14 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.EnableMinesCountButtons();
         UIManager.Instance.EnableBetAmntButtons();
 
-        UIManager.Instance.ResetRiskPercentageDisplay();
-        UIManager.Instance.EnableCatfishDirectSetButtons();
+        UIManager.Instance.EnableMinesDirectSetButtons();
         UIManager.Instance.ResetSwipeCountDisplay();
 
         ResetMinesTracker();
-       // minesManager.ResetTotalMinesCount();
+
         BettingManager.Instance.ResetTotalWinnings();
         BettingManager.Instance.UpdateBalanceText();
 
-
-     /*   PanelFadeOutManager panelFadeOutManager = FindObjectOfType<PanelFadeOutManager>();
-        panelFadeOutManager.FadeInOut(UIManager.Instance.gameOverPanel, UIManager.Instance.gameOverText);*/
-        // Destroy all the mines object
-        //Reset Multipliers
         BettingManager.Instance.ResetMultipliers();
         UIManager.Instance.ResetMultiplierPanelsToDefault();
         UIManager.Instance.UpdateMultiplierPanels();
