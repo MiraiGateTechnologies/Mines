@@ -115,10 +115,6 @@ public class MinesManager : MonoBehaviour
             BettingManager.Instance.balanceAmount -= BettingManager.Instance.betAmount;
             BettingManager.Instance.UpdateBalanceText();
         }
-        if(GameManager.Instance.diamondsOpened==(25-totalMines))
-        {
-            UIManager.Instance.cashOutButton.onClick.Invoke();
-        }
         diamondImage.GetComponentInParent<Button>().interactable = false;
         UIManager.Instance.diamondOpenSound.Play();
         diamondImage.gameObject.SetActive(true);
@@ -135,6 +131,10 @@ public class MinesManager : MonoBehaviour
         Debug.Log("Multiplier Current = " + incrementedMultiplier);
 
         BettingManager.Instance.UpdateToBeAddedAmntText(winnings);
+        if(GameManager.Instance.diamondsOpened==(25-totalMines))
+        {
+            UIManager.Instance.cashOutButton.onClick.Invoke();
+        }
 
     }
 
