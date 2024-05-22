@@ -351,6 +351,10 @@ public class UIManager : MonoBehaviour
         whenWinningIncrease.image.sprite = IncreaseOnSprite;
         whenWinningReset.image.sprite = resetOffSprite;
         IncreaseWhenWinningEnabled = true;
+        whenWinningIncreaseBy.text = "100";
+        IncreaseWhenWinningValue = 100;
+
+
     }
     public void WhenWinningResetPressed()
     {
@@ -365,6 +369,8 @@ public class UIManager : MonoBehaviour
         whenLosingIncrease.image.sprite = IncreaseOnSprite;
         whenLosingReset.image.sprite = resetOffSprite;
         IncreaseWhenLosingEnabled = true;
+        whenLosingIncreaseBy.text = "100";
+        IncreaseWhenLosingValue = 100;
     }
 
     public void WhenLosingResetPressed()
@@ -422,7 +428,7 @@ public class UIManager : MonoBehaviour
 
     #region Catfish Count Functions
     ///////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////      Catfish Count Funct     /////////////////////////////
+    ////////////////////////////      Mines Count Funct     /////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
     public void IncreaseMaxMinesCount()
     {
@@ -861,21 +867,9 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-    private void ResetMultiplierPanels()
-    {
-        // Reset all panels to the default state
-        for (int i = 0; i < instantiatedPanels.Count; i++)
-        {
-            Image panelImage = instantiatedPanels[i].GetComponent<Image>();
-            panelImage.sprite = defaultMultiplierSprite;
-        }
-    }
     public void ResetMultiplierPanelsToDefault()
     {
         currentMultiplierIndex = 0;
-
-        // Set default text color (assuming you want to revert to this color)
-        Color defaultTextColor = new Color32(0xE6, 0x49, 0x7E, 0xFF); // Example color
 
         // Iterate through all instantiated panels
         foreach (var panel in instantiatedPanels)

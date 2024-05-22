@@ -198,7 +198,7 @@ public class BettingManager : MonoBehaviour
         float baseMultiplier = minesMultipliers[currentMinesCount];
         nextMultipliers.Clear(); // Clear the list before adding new values
 
-        for (int i = 0; i < (MinesManager.Instance.allGridItems.Count - MinesManager.Instance.totalMines); i++)
+        for (int i = 0; i < (25 - MinesManager.Instance.totalMines); i++)
         {
             float multiplier = baseMultiplier + (i * MinesManager.Instance.multiplierIncrementValue);
             nextMultipliers.Add(multiplier);

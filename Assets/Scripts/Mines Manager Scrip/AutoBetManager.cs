@@ -61,7 +61,6 @@ public class AutoBetManager : MonoBehaviour
 
     #endregion Properties
 
-
     #region Start And Stop Bet
 
     public void StartAutoBet()
@@ -176,6 +175,7 @@ public class AutoBetManager : MonoBehaviour
             for (int i = 0; i < numberOfRounds && !stopRequested && (BettingManager.Instance.betAmount <= BettingManager.Instance.balanceAmount); i++)
 
             {
+                BettingManager.Instance.balanceAmount -= BettingManager.Instance.betAmount;
                 UIManager.Instance.manualButton.interactable = false;
                 GameManager.Instance.minesManager.InstantiateWithoutDelay();//Instantiate elements
                 MinesManager.Instance.DisableAllObjects();
