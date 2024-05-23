@@ -117,6 +117,8 @@ public class UIManager : MonoBehaviour
     public Button whenLosingReset;
     public Button whenLosingIncrease;
     public TMP_InputField whenWinningIncreaseBy;
+    public float betAmountBeforeWhenWinningIncrease;
+    public float betAmountBeforeWhenLosingIncrease;
     public TMP_InputField whenLosingIncreaseBy;
     public Button stopAtAnyWin;
     public Sprite stopAtWinFalse;
@@ -347,17 +349,18 @@ public class UIManager : MonoBehaviour
 
     public void WhenWinningIncreasePressed()
     {
+        betAmountBeforeWhenWinningIncrease=bettingManager.betAmount;
         whenWinningIncreaseBy.interactable = true;
         whenWinningIncrease.image.sprite = IncreaseOnSprite;
         whenWinningReset.image.sprite = resetOffSprite;
         IncreaseWhenWinningEnabled = true;
         whenWinningIncreaseBy.text = "100";
         IncreaseWhenWinningValue = 100;
-
-
     }
     public void WhenWinningResetPressed()
     {
+        bettingManager.betAmount = betAmountBeforeWhenWinningIncrease;
+        BettingManager.Instance.UpdateBetAmountIfIncrease(betAmountBeforeWhenWinningIncrease);
         whenWinningIncreaseBy.interactable = false;
         whenWinningIncrease.image.sprite = IncreaseOffSprite;
         whenWinningReset.image.sprite = resetOnSprite;
@@ -365,6 +368,7 @@ public class UIManager : MonoBehaviour
     }
     public void WhenLosingIncreasePressed()
     {
+        betAmountBeforeWhenLosingIncrease=bettingManager.betAmount;
         whenLosingIncreaseBy.interactable = true;
         whenLosingIncrease.image.sprite = IncreaseOnSprite;
         whenLosingReset.image.sprite = resetOffSprite;
@@ -375,6 +379,8 @@ public class UIManager : MonoBehaviour
 
     public void WhenLosingResetPressed()
     {
+        bettingManager.betAmount = betAmountBeforeWhenLosingIncrease;
+        BettingManager.Instance.UpdateBetAmountIfIncrease(betAmountBeforeWhenLosingIncrease);
         whenLosingIncreaseBy.interactable = false;
         whenLosingIncrease.image.sprite = IncreaseOffSprite;
         whenLosingReset.image.sprite = resetOnSprite;
