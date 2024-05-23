@@ -108,6 +108,7 @@ public class UIManager : MonoBehaviour
     [Header("11. Win Panel and Text")]
     public Image winPanelImage;
     public TextMeshProUGUI winPanelText;
+    public GameObject plusAmountAnimation;
 
     [Header("12. Auto Bet buttons and Panels")]
     public Button autoBetButton;
@@ -641,7 +642,7 @@ public class UIManager : MonoBehaviour
         MinesManager.Instance.DisableAllObjects();
         cashOutSound.Play();
         winPercentText.text= "+"+CalculateWinPercent(bettingManager.totalWinnings, bettingManager.betAmount) +"%";
-        lastMultiplierText.text = MinesManager.Instance.winningsInManual.ToString();
+        lastMultiplierText.text ="x" +MinesManager.Instance.winningsInManual.ToString();
 
         GameManager.Instance.ResetMinesTracker();
         GameManager.Instance.gameStarted = false;
@@ -668,6 +669,13 @@ public class UIManager : MonoBehaviour
         UpdateMultiplierPanels(); // Update the UI to reflect the reset
         GameManager.Instance.gameStarted = false;
 
+    }
+
+    public IEnumerator  plusAnimationPlayAndStop()
+    {
+        plusAmountAnimation.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        plusAmountAnimation.SetActive(false);
     }
 
 

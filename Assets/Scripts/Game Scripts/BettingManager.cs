@@ -158,6 +158,7 @@ public class BettingManager : MonoBehaviour
     public void CashOutWinnings()
     {
         balanceAmount += totalWinnings;
+        StartCoroutine(UIManager.Instance.plusAnimationPlayAndStop());
         UpdateBalanceText();
       //  ResetTotalWinnings();
     }
