@@ -158,9 +158,8 @@ public class BettingManager : MonoBehaviour
     public void CashOutWinnings()
     {
         balanceAmount += totalWinnings;
-        StartCoroutine(UIManager.Instance.plusAnimationPlayAndStop());
+        StartCoroutine(UIManager.Instance.plusAnimationPlayAndStop(totalWinnings));
         UpdateBalanceText();
-      //  ResetTotalWinnings();
     }
     // Resets the total winnings to 0 and updates the display
     public void ResetTotalWinnings()
@@ -223,7 +222,8 @@ public class BettingManager : MonoBehaviour
     {
         // Reset the multipliers to their initial state or any desired state
         nextMultipliers.Clear();
-
+         UIManager.Instance.ResetToDefaultMultipliers();
+        UIManager.Instance.NumberOfInstantiatedPanels = 5;
         CalculateNextMultipliers();
     }
 

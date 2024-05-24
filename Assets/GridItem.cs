@@ -37,8 +37,6 @@ public class GridItem : MonoBehaviour
         else if(selectedForAuto==true)//DESELECT PREVIOUSLY SELECTED BUTTONS
         {
             GameManager.Instance.autoBetManager.RemoveBetELements(this.gameObject, GameManager.InstantiatedGridObjects.IndexOf(this.gameObject));
-
-
         }
         else//SELECT BUTTONS
         {

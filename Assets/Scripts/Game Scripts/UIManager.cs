@@ -146,6 +146,8 @@ public class UIManager : MonoBehaviour
 
     string currentMultiplierNumber;
     private float tolerance= 0.0001f;
+
+    public int NumberOfInstantiatedPanels = 5;
     #endregion References 
 
 
@@ -262,6 +264,8 @@ public class UIManager : MonoBehaviour
     {
         MinesManager.Instance.DestroyAllTheObjects();
         AutoBetUiInteractableSet(true);
+        WhenWinningIncreasePressed();
+        WhenLosingIncreasePressed();
         HighlightMultiplierPanel(currentMultiplierIndex);
         autoBetButton.image.sprite = AutoManualEnabledSprite;
         manualButton.image.sprite = AutoManualDisabledSprite;
@@ -294,6 +298,7 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.autoBetManager.p_NewAutoBetSession = true;
         GameManager.Instance.autoBetManager.StartAutoBet();
+        SettingBetAmountInIncrrease();
         bettingManager.betAmountInput.interactable = false;
     }
 
@@ -346,46 +351,74 @@ public class UIManager : MonoBehaviour
         MinesManager.Instance.DestroyAllTheObjects();
         GameManager.Instance.autoBet = false;
         ShowStartButton(true);
+        //ResetToDefaultMultipliers();
     }
 
     public void WhenWinningIncreasePressed()
     {
-        betAmountBeforeWhenWinningIncrease=bettingManager.betAmount;
+       
         whenWinningIncreaseBy.interactable = true;
         whenWinningIncrease.image.sprite = IncreaseOnSprite;
         whenWinningReset.image.sprite = resetOffSprite;
         IncreaseWhenWinningEnabled = true;
-        whenWinningIncreaseBy.text = "100";
-        IncreaseWhenWinningValue = 100;
+        whenWinningIncreaseBy.text = "0";
+        IncreaseWhenWinningValue = 0;
+        whenWinningReset.interactable = true;
+        whenWinningIncrease.interactable = false;
     }
     public void WhenWinningResetPressed()
     {
-        bettingManager.betAmount = betAmountBeforeWhenWinningIncrease;
-        BettingManager.Instance.UpdateBetAmountIfIncrease(betAmountBeforeWhenWinningIncrease);
+/*        bettingManager.betAmount = betAmountBeforeWhenWinningIncrease;
+        BettingManager.Instance.UpdateBetAmountIfIncrease(betAmountBeforeWhenWinningIncrease);*/
         whenWinningIncreaseBy.interactable = false;
         whenWinningIncrease.image.sprite = IncreaseOffSprite;
         whenWinningReset.image.sprite = resetOnSprite;
         IncreaseWhenWinningEnabled = false;
+        whenWinningReset.interactable = false;
+        whenWinningIncrease.interactable = true;
     }
+    public void SettingBetAmountInIncrrease()
+    {
+        betAmountBeforeWhenWinningIncrease = bettingManager.betAmount;
+        betAmountBeforeWhenLosingIncrease = bettingManager.betAmount;
+    }
+
+    public void ResettingWhenIncrease()
+    {
+        bettingManager.betAmount = betAmountBeforeWhenWinningIncrease;
+        BettingManager.Instance.UpdateBetAmountIfIncrease(betAmountBeforeWhenWinningIncrease);
+    }
+    
+    public void ResettingWhenLosing()
+    {
+        bettingManager.betAmount = betAmountBeforeWhenLosingIncrease;
+        BettingManager.Instance.UpdateBetAmountIfIncrease(betAmountBeforeWhenLosingIncrease);
+    }
+
     public void WhenLosingIncreasePressed()
     {
-        betAmountBeforeWhenLosingIncrease=bettingManager.betAmount;
+       
         whenLosingIncreaseBy.interactable = true;
         whenLosingIncrease.image.sprite = IncreaseOnSprite;
         whenLosingReset.image.sprite = resetOffSprite;
         IncreaseWhenLosingEnabled = true;
-        whenLosingIncreaseBy.text = "100";
-        IncreaseWhenLosingValue = 100;
+        whenLosingIncreaseBy.text = "0";
+        IncreaseWhenLosingValue = 0;
+        whenLosingReset.interactable = true;
+        whenLosingIncrease.interactable = false;
     }
+
 
     public void WhenLosingResetPressed()
     {
-        bettingManager.betAmount = betAmountBeforeWhenLosingIncrease;
-        BettingManager.Instance.UpdateBetAmountIfIncrease(betAmountBeforeWhenLosingIncrease);
+/*        bettingManager.betAmount = betAmountBeforeWhenLosingIncrease;
+        BettingManager.Instance.UpdateBetAmountIfIncrease(betAmountBeforeWhenLosingIncrease);*/
         whenLosingIncreaseBy.interactable = false;
         whenLosingIncrease.image.sprite = IncreaseOffSprite;
         whenLosingReset.image.sprite = resetOnSprite;
         IncreaseWhenLosingEnabled = false;
+        whenLosingReset.interactable = false;
+        whenLosingIncrease.interactable = true;
     }
 
     #endregion Auto Bet Functionality
@@ -671,8 +704,9 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public IEnumerator  plusAnimationPlayAndStop()
+    public IEnumerator plusAnimationPlayAndStop(float amount)
     {
+        plusAmountAnimation.GetComponent<TextMeshProUGUI>().text="+"+amount.ToString();
         plusAmountAnimation.SetActive(true);
         yield return new WaitForSeconds(0.5f);
         plusAmountAnimation.SetActive(false);
@@ -764,6 +798,7 @@ public class UIManager : MonoBehaviour
         Debug.Log("START INDEX FOR NEW MULTIPLIERS = " + startIndexForNewMultipliers);
         for (int i = 0; i < 2; i++)
         {
+
             GameObject newPanel = Instantiate(multiplierValuePanelPrefab, multiplierPanelParent);
             TextMeshProUGUI textComponent = newPanel.GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null && startIndexForNewMultipliers + i < bettingManager.nextMultipliers.Count)
@@ -772,8 +807,23 @@ public class UIManager : MonoBehaviour
                 textComponent.text = $"x{bettingManager.nextMultipliers[startIndexForNewMultipliers + i]:F2}";
             }
             instantiatedPanels.Add(newPanel);
+            NumberOfInstantiatedPanels++;
+            if (NumberOfInstantiatedPanels > bettingManager.nextMultipliers.Count)
+            {
+                textComponent.enabled = false;
+                newPanel.GetComponent<Image>().enabled = false;
+            }
         }
 
+    }
+
+    public void ResetToDefaultMultipliers()
+    {
+        foreach(var panel in instantiatedPanels)
+        {
+            panel.GetComponent<Image>().enabled = true;
+            panel.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+        }
     }
 
     public void CheckAndAdjustMultiplierPanelInAuto()
@@ -794,6 +844,7 @@ public class UIManager : MonoBehaviour
         /*currentMultiplierIndex += 2;*/
         for (int i = count - 1; i >= count - 2; i--)
         {
+            NumberOfInstantiatedPanels--;
             Destroy(instantiatedPanels[i].gameObject);
             instantiatedPanels.RemoveAt(i);
         }

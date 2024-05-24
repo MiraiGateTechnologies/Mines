@@ -68,6 +68,8 @@ public class AutoBetManager : MonoBehaviour
         UIManager.Instance.disableUIWhenGameStarted.Invoke();
         GameManager.Instance.minesManager.DestroyAllTheObjects();
 
+
+
         UIManager.Instance.AutoBetUiInteractableSet(false);
         roundWinStatus = true;
         UIManager.Instance.StopAutoPlayButtonSet(true);
@@ -105,7 +107,24 @@ public class AutoBetManager : MonoBehaviour
         UIManager.Instance.UpdateMultiplierPanels();
         UIManager.Instance.EnableUIWhenGameEnded.Invoke();
 
+        if(UIManager.Instance.IncreaseWhenWinningEnabled==true)
+        {
+            UIManager.Instance.WhenWinningIncreasePressed();
+        }
+        else
+        {
+            UIManager.Instance.WhenWinningResetPressed();
+        }
 
+        if(UIManager.Instance.IncreaseWhenLosingEnabled == true)
+        {
+            UIManager.Instance.WhenLosingIncreasePressed();
+        }
+        else
+        {
+            UIManager.Instance.WhenLosingResetPressed();
+        }
+       // UIManager.Instance.ResetToDefaultMultipliers();
     }
 
     #endregion Start and Stop Bet
@@ -235,7 +254,7 @@ public class AutoBetManager : MonoBehaviour
     }
     public void RemoveBetELements(GameObject gridGameObject, int index)
     {
-        if (GameManager.Instance.diamondsOpened < (25 - MinesManager.Instance.totalMines))
+        //if (GameManager.Instance.diamondsOpened < (25 - MinesManager.Instance.totalMines))
         {
             gridGameObject.GetComponent<GridItem>().autoImage.gameObject.SetActive(false);
             gridGameObject.GetComponent<GridItem>().selectedForAuto = false;
@@ -302,6 +321,10 @@ public class AutoBetManager : MonoBehaviour
                     BettingManager.Instance.UpdateBetAmountIfIncrease(TempBetAmount);
                 }
             }
+            else
+            {
+                UIManager.Instance.ResettingWhenIncrease();
+            }
         }
         else
         {
@@ -315,6 +338,10 @@ public class AutoBetManager : MonoBehaviour
                     BettingManager.Instance.betAmount = TempBetAmount;
                     BettingManager.Instance.UpdateBetAmountIfIncrease(TempBetAmount);
                 }
+            }
+            else
+            {
+                UIManager.Instance.ResettingWhenLosing();
             }
         }
     }
