@@ -222,7 +222,7 @@ public class BettingManager : MonoBehaviour
     {
         // Reset the multipliers to their initial state or any desired state
         nextMultipliers.Clear();
-         UIManager.Instance.ResetToDefaultMultipliers();
+        UIManager.Instance.ResetToDefaultMultipliers();
         UIManager.Instance.NumberOfInstantiatedPanels = 5;
         CalculateNextMultipliers();
     }
