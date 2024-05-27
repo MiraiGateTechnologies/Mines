@@ -240,6 +240,7 @@ public class AutoBetManager : MonoBehaviour
             UIManager.Instance.currentMultiplierIndex++;
 
             UIManager.Instance.CheckAndAdjustMultiplierPanelInAuto();
+
             UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
 
 

@@ -25,7 +25,9 @@ public class BettingManager : MonoBehaviour
     public float betAmount = 10f;
     public float minBetAmount = 10f;
     public float totalWinnings = 0f;
-    public List<float> nextMultipliers = new List<float>();
+    public List<double> nextMultipliers = new List<double>();
+    public int mines;
+    public int Diamonds;
 
     public Dictionary<int, float> minesMultipliers = new Dictionary<int, float>()
     {
@@ -198,12 +200,24 @@ public class BettingManager : MonoBehaviour
         float baseMultiplier = minesMultipliers[currentMinesCount];
         nextMultipliers.Clear(); // Clear the list before adding new values
 
-        for (int i = 0; i < (25 - MinesManager.Instance.totalMines); i++)
+
+        int multiplierCount = 25 - currentMinesCount;
+        for (Diamonds = 1; Diamonds <= multiplierCount; Diamonds++)
+        {
+
+            // Calculate the multiplier
+            double multiplier = CalculateMultiplier(currentMinesCount, Diamonds);
+            nextMultipliers.Add(multiplier);
+
+        }
+
+
+/*        for (int i = 0; i < (25 - MinesManager.Instance.totalMines); i++)
         {
             float multiplier = baseMultiplier + (i * MinesManager.Instance.multiplierIncrementValue);
             nextMultipliers.Add(multiplier);
         }
-
+*/
         //Disabling panels if we increase number of mines
         if(nextMultipliers.Count < 5)
         {
@@ -217,6 +231,22 @@ public class BettingManager : MonoBehaviour
 
         // Debug log to verify the calculations
         Debug.Log("Next 20 Multipliers: " + string.Join(", ", nextMultipliers));
+    }
+    double CalculateMultiplier(int mines, int diamonds)
+    {
+        double houseEdge = 0.01;
+        return (1 - houseEdge) * Combination(25, diamonds) / Combination(25 - mines, diamonds);
+    }
+
+    long Combination(int n, int r)
+    {
+        long result = 1;
+        for (int i = 0; i < r; i++)
+        {
+            result *= (n - i);
+            result /= (i + 1);
+        }
+        return result;
     }
     public void ResetMultipliers()
     {
