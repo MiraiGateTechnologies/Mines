@@ -145,7 +145,7 @@ public class UIManager : MonoBehaviour
     public float IncreaseWhenLosingValue;
 
     string currentMultiplierNumber;
-    private float tolerance= 0.0001f;
+    private float tolerance= 0.3f;
 
     public int NumberOfInstantiatedPanels = 5;
     #endregion References 
@@ -840,6 +840,18 @@ public class UIManager : MonoBehaviour
     }
     private void RecycleAutoBackwards()
     {
+        #region checking if it is the first element
+
+        int startIndexTemp = CheckAndReturnStartIndex();
+        if (startIndexTemp < 0)
+        {
+            HighlightMultiplierPanel(currentMultiplierIndex);
+            return;
+        }
+
+        #endregion checking if it is the first element
+
+
         int count = instantiatedPanels.Count;
         /*currentMultiplierIndex += 2;*/
         for (int i = count - 1; i >= count - 2; i--)
@@ -849,26 +861,9 @@ public class UIManager : MonoBehaviour
             instantiatedPanels.RemoveAt(i);
         }
 
-        Debug.Log("CURRENT  MULTIPLIERRR = " + currentMultiplierIndex);
-        string startString = instantiatedPanels[0].GetComponentInChildren<TextMeshProUGUI>().text;
-        Debug.Log("<color=red>Start Index = </color>" + startString);
-        startString = startString.Substring(1);
-        float startValue;
-        float.TryParse(startString, out startValue);
-        int temp = bettingManager.nextMultipliers.IndexOf(startValue);
-        if(temp == -1)
-        {
-            for (int i = 0; i < bettingManager.nextMultipliers.Count; i++)
-            {
-                if (Mathf.Abs((float)(bettingManager.nextMultipliers[i] - startValue)) < tolerance)
-                {
-                    temp = i;
-                    break;
-                }
-            }
-        }
-        int startindex = temp-2;
-        Debug.Log("<color=green>Start Index = </color>" + bettingManager.nextMultipliers.IndexOf(startValue));
+        int startindex = CheckAndReturnStartIndex();
+
+
         for (int i = 0; i < 2; i++)
         {
             GameObject newPanel = Instantiate(multiplierValuePanelPrefab, multiplierPanelParent);
@@ -888,6 +883,29 @@ public class UIManager : MonoBehaviour
         currentMultiplierIndex += 2;
         HighlightMultiplierPanel(currentMultiplierIndex);
 
+    }
+    private int CheckAndReturnStartIndex()
+    {
+        string startString = instantiatedPanels[0].GetComponentInChildren<TextMeshProUGUI>().text;
+        Debug.Log("<color=red>Start Index = </color>" + startString);
+        startString = startString.Substring(1);
+        double startValue;
+        double.TryParse(startString, out startValue);
+        int temp = bettingManager.nextMultipliers.IndexOf(startValue);
+        if (temp == -1)
+        {
+            for (int i = 0; i < bettingManager.nextMultipliers.Count; i++)
+            {
+                if (Mathf.Abs((float)(bettingManager.nextMultipliers[i] - startValue)) < tolerance)
+                {
+                    var val = Mathf.Abs((float)(bettingManager.nextMultipliers[i] - startValue));
+                    temp = i;
+                    break;
+                }
+            }
+        }
+        int startindex = temp - 2;
+        return startindex;
     }
     public void CheckAndAdjustMultiplierPanels()//called in swipe tracker class whenever we right swipe
     {
@@ -934,7 +952,7 @@ public class UIManager : MonoBehaviour
     }
     public void ResetMultiplierPanelsToDefault()
     {
-        currentMultiplierIndex = 0;
+        currentMultiplierIndex = -1;
 
         // Iterate through all instantiated panels
         foreach (var panel in instantiatedPanels)

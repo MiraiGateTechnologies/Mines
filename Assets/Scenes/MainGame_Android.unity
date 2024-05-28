@@ -11017,7 +11017,7 @@ MonoBehaviour:
   settingsPanel: {fileID: 0}
   gameOverPanel: {fileID: 523901994}
   gameOverText: {fileID: 178041615}
-  currentMultiplierIndex: 0
+  currentMultiplierIndex: -1
   winPanelImage: {fileID: 1031984317}
   winPanelText: {fileID: 1025216648}
   plusAmountAnimation: {fileID: 1145675884}
