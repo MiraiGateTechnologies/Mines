@@ -71,7 +71,6 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.EnableBetAmntButtons();
 
         UIManager.Instance.EnableMinesDirectSetButtons();
-        UIManager.Instance.ResetSwipeCountDisplay();
 
         ResetMinesTracker();
 

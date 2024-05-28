@@ -67,8 +67,11 @@ public class BettingManager : MonoBehaviour
     public void IncreaseBet()//Call with + button
     {
         UpdateBetAmountFromInput();
-        betAmount += 5;
-        betAmount = Mathf.Min(betAmount, balanceAmount);
+        if (balanceAmount >= minBetAmount)
+        {
+            betAmount += 5;
+            betAmount = Mathf.Min(betAmount, balanceAmount);
+        }
         UpdateBetAmountInput();
 
         if (UIManager.Instance.genericButtonSound != null)
@@ -102,8 +105,11 @@ public class BettingManager : MonoBehaviour
         {
             UIManager.Instance.genericButtonSound.Play();
         }
-        betAmount = balanceAmount;
-        UpdateBetAmountInput();
+        if (balanceAmount >= minBetAmount)
+        {
+            betAmount = balanceAmount;
+            UpdateBetAmountInput();
+        }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////    Validates and updates bet amount based on the user's input     ///////////////////

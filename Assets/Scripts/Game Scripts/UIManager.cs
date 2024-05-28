@@ -1,9 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -134,6 +131,7 @@ public class UIManager : MonoBehaviour
     public Sprite IncreaseOffSprite;
     public Sprite IncreaseOnSprite;
     public Sprite HighlightedBoxSprite;
+    public Image numberOfRoundsInfinite;
 
     public UnityAction disableUIWhenGameStarted;
     public UnityAction EnableUIWhenGameEnded;
@@ -189,6 +187,18 @@ public class UIManager : MonoBehaviour
         EnableUIWhenGameEnded += EnableMinesDirectSetButtons;
 
         manualButton.interactable = false;
+        numberOfRounds.onSubmit.AddListener((value) =>
+        {
+            if (int.Parse(value) == 0||value==null)
+            {
+                numberOfRounds.text = "";
+                numberOfRoundsInfinite.enabled = true;
+            }
+            else
+            {
+                numberOfRoundsInfinite.enabled = false;
+            }
+        });
     }
     #endregion Awake and Start
 
@@ -296,6 +306,22 @@ public class UIManager : MonoBehaviour
 
     void StartAutoPlayButtonPressed()
     {
+        if (bettingManager.balanceAmount < bettingManager.minBetAmount)
+        {
+
+            //Show insufficient balance panel
+            if (balanceFadeManager != null)
+            {
+                balanceFadeManager.ShowInsufficientBalancePanel();
+                MinesManager.Instance.InstantiateWithoutDelay();
+                GameManager.Instance.autoBetManager.StopAutoBet();
+            }
+            else
+            {
+                Debug.LogError("BalanceFadeManager not found in the scene.");
+            }
+            return;
+        }
         GameManager.Instance.autoBetManager.p_NewAutoBetSession = true;
         GameManager.Instance.autoBetManager.StartAutoBet();
         SettingBetAmountInIncrrease();
@@ -445,26 +471,6 @@ public class UIManager : MonoBehaviour
     }
     #endregion Risk Percentage Display Functions
 
-    #region Swipe Count Display Functions
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////      Swipe Count Display Functions     /////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////
-    public void UpdateSwipeCountDisplay(int currentSwipe, int totalSwipes)
-    {
-        if (swipeCountText != null)
-        {
-            swipeCountText.text = $"{currentSwipe}/{totalSwipes}";
-        }
-    }
-    public void ResetSwipeCountDisplay()
-    {
-        if (swipeCountText != null)
-        {
-            swipeCountText.text = $"0/25";
-        }
-
-    }
-    #endregion Swipe Count Display Functions
 
     #region Catfish Count Functions
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -644,7 +650,6 @@ public class UIManager : MonoBehaviour
         EnableMinesDirectSetButtons();
 
         ResetRiskPercentageDisplay();
-        ResetSwipeCountDisplay();
 
         bettingManager.ResetMultipliers(); // Reset the multipliers
         ResetMultiplierPanelsToDefault(); // Reset UI panels to default
@@ -695,7 +700,6 @@ public class UIManager : MonoBehaviour
         EnableMinesDirectSetButtons();
 
         ResetRiskPercentageDisplay();
-        ResetSwipeCountDisplay();
 
         bettingManager.ResetMultipliers(); // Reset the multipliers
         ResetMultiplierPanelsToDefault(); // Reset UI panels to default
@@ -793,7 +797,7 @@ public class UIManager : MonoBehaviour
 
 
         // Add two new panels at the end
-        int startIndexForNewMultipliers = instantiatedPanels.Count + GameManager.Instance.diamondsOpened - 3; // Adjust based on current multiplier index
+        int startIndexForNewMultipliers = instantiatedPanels.Count + GameManager.Instance.diamondsOpened - 4; // Adjust based on current multiplier index
 
         Debug.Log("START INDEX FOR NEW MULTIPLIERS = " + startIndexForNewMultipliers);
         for (int i = 0; i < 2; i++)
@@ -819,11 +823,17 @@ public class UIManager : MonoBehaviour
 
     public void ResetToDefaultMultipliers()
     {
-        foreach(var panel in instantiatedPanels)
+        for(int i = 0;i<instantiatedPanelsEnabledCount;i++)
         {
+            var panel = instantiatedPanels[i];
             panel.GetComponent<Image>().enabled = true;
             panel.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
         }
+/*        foreach(var panel in instantiatedPanels)
+        {
+            panel.GetComponent<Image>().enabled = true;
+            panel.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+        }*/
     }
 
     public void CheckAndAdjustMultiplierPanelInAuto()
