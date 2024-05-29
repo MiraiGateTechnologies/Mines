@@ -88,9 +88,10 @@ public class AutoBetManager : MonoBehaviour
     }
     public void StopAutoBet()
     {
+       
         BettingManager.Instance.betAmountInput.interactable = true;
         p_NewAutoBetSession = false;
-        IndexOfSelectedElements.Clear();
+        StartCoroutine(ClearSelectedIndexList());
         UIManager.Instance.AutoBetUiInteractableSet(true);
         UIManager.Instance.StopAutoPlayButtonSet(false);
         UIManager.Instance.StartAutoPlaySet(true);
@@ -127,6 +128,13 @@ public class AutoBetManager : MonoBehaviour
        // UIManager.Instance.ResetToDefaultMultipliers();
     }
 
+    private IEnumerator ClearSelectedIndexList()
+    {
+        yield return new WaitForSeconds(1.5f);
+        Debug.Log("<color=red> BET ITEMS CLEARED</color>");
+        IndexOfSelectedElements.Clear();
+    }
+
     #endregion Start and Stop Bet
 
     #region Bet Iterations
@@ -136,7 +144,7 @@ public class AutoBetManager : MonoBehaviour
         {
             MinesManager.Instance.InstantiateWithoutDelay();
             ShowInsufficiecntBalanceMessage();
-            StopAutoBet();
+           StopAutoBet();
         }
 
 
@@ -151,22 +159,23 @@ public class AutoBetManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.4f); // Adjust time as needed
             MinesManager.Instance.ShowAllItems();//Reveal all the objects
-
+            
             AddElementsSelectedToList();
 
             yield return new WaitForSeconds(1f); // Adjust time as needed
 
             WinOrLoseCalculator();// reveal all the objects and calculate total winnings
-
-            yield return new WaitForSeconds(1f); // Adjust time as needed
+            Debug.Log("<color=blue> Iteration</color>");
+            yield return new WaitForSeconds(1.2f); // Adjust time as needed
             GameManager.Instance.minesManager.DestroyAllTheObjects();
-            selectedGridElements.Clear();
             GameManager.InstantiatedGridObjects.Clear();
+            selectedGridElements.Clear();
 
         }
         if (stopRequested)
         {
             MinesManager.Instance.InstantiateWithoutDelay();
+
             yield return new WaitForSeconds(1f);
             UIManager.Instance.manualButton.interactable = true;
         }
@@ -175,7 +184,7 @@ public class AutoBetManager : MonoBehaviour
         {
             ShowInsufficiecntBalanceMessage();
             MinesManager.Instance.InstantiateWithoutDelay();
-            StopAutoBet();
+           StopAutoBet();
         }
 
     }
@@ -186,7 +195,7 @@ public class AutoBetManager : MonoBehaviour
         {
             MinesManager.Instance.InstantiateWithoutDelay();
             ShowInsufficiecntBalanceMessage();
-            StopAutoBet();
+           StopAutoBet();
         }
         else if (BettingManager.Instance.betAmount <= BettingManager.Instance.balanceAmount)
         {
@@ -217,7 +226,8 @@ public class AutoBetManager : MonoBehaviour
             {
                 ShowInsufficiecntBalanceMessage();
             }
-            StopAutoBet();
+
+           StopAutoBet();
             MinesManager.Instance.InstantiateWithoutDelay();
             yield return new WaitForSeconds(1f);
             UIManager.Instance.manualButton.interactable = true;
@@ -310,7 +320,7 @@ public class AutoBetManager : MonoBehaviour
             UIManager.Instance.OnAutoWin();
             if (p_StopAtWinClicked == true)
             {
-                StopAutoBet();
+               StopAutoBet();
             }
             if (UIManager.Instance.IncreaseWhenWinningEnabled == true)
             {

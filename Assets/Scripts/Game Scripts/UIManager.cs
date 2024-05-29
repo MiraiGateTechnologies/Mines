@@ -314,7 +314,7 @@ public class UIManager : MonoBehaviour
             {
                 balanceFadeManager.ShowInsufficientBalancePanel();
                 MinesManager.Instance.InstantiateWithoutDelay();
-                GameManager.Instance.autoBetManager.StopAutoBet();
+               GameManager.Instance.autoBetManager.StopAutoBet();
             }
             else
             {
@@ -359,7 +359,7 @@ public class UIManager : MonoBehaviour
 
     public void StopAutoPlayPressed()
     {
-        GameManager.Instance.autoBetManager.StopAutoBet();
+       GameManager.Instance.autoBetManager.StopAutoBet();
     }
 
     public void ManualButtonPressed()
@@ -476,8 +476,21 @@ public class UIManager : MonoBehaviour
     ///////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////      Mines Count Funct     /////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
-    public void IncreaseMaxMinesCount()
+    
+    public bool CheckIfTheMinesCountExceedsTheSelectedItems()
     {
+        if (25 - GameManager.Instance.diamondsOpened <= GameManager.Instance.totalMinesCount && GameManager.Instance.autoBet == true)
+        {
+            return true;
+        }
+        return false;
+    }
+    public void IncreaseMaxMinesCount()
+    {        
+        if(CheckIfTheMinesCountExceedsTheSelectedItems()==true)
+        {
+            return;
+        }
         if (GameManager.Instance.totalMinesCount < 24)
         {
             GameManager.Instance.totalMinesCount++;
@@ -502,6 +515,10 @@ public class UIManager : MonoBehaviour
     }
     void SetMinesCount(int count)
     {
+        if(GameManager.Instance.autoBet == true && count>25-GameManager.Instance.diamondsOpened)
+        {
+            count = 25 - GameManager.Instance.diamondsOpened;
+        }
         MinesManager.Instance.totalMines = count;
         GameManager.Instance.totalMinesCount= count;
         UpdateMaxMinesCountDisplay();

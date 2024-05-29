@@ -70,6 +70,7 @@ public class MinesManager : MonoBehaviour
             if (item.isMine)
             {
                 item.mineImage.gameObject.SetActive(true);
+                
             }
             else
             {
