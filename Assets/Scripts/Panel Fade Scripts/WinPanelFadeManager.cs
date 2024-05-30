@@ -11,6 +11,7 @@ public class WinPanelFadeManager : MonoBehaviour
     public Button checkHistoryButton; // Reference to the "check history" button
     public float fadeDuration = 1.0f;
     public float stayDuration = 1.0f;
+    private float stayDurationOfObjects = 0.25f;
 
     private void Start()
     {
@@ -25,9 +26,13 @@ public class WinPanelFadeManager : MonoBehaviour
 
     private IEnumerator FadeInAndOut()
     {
+        UIManager.Instance.startButton.interactable = false;
         yield return FadeTo(1.0f); // Fade in
         yield return new WaitForSeconds(stayDuration);
         yield return FadeTo(0.0f); // Fade out
+        yield return new WaitForSeconds(stayDurationOfObjects);
+        MinesManager.Instance.DestroyAllTheObjects();
+        UIManager.Instance.startButton.interactable = true;
     }
 
     private IEnumerator FadeTo(float targetAlpha)

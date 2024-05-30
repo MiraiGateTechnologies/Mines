@@ -80,14 +80,17 @@ public class MinesManager : MonoBehaviour
     }
     public void DestroyAllTheObjects()
     {
-        if (allGridItems.Count > 0)
+        if (allGridItems != null)
         {
-            foreach (var item in allGridItems)
+            if (allGridItems.Count > 0)
             {
-                Destroy(item.gameObject);
+                foreach (var item in allGridItems)
+                {
+                    Destroy(item.gameObject);
+                }
+                allGridItems.Clear();
+                GameManager.InstantiatedGridObjects.Clear();
             }
-            allGridItems.Clear();
-            GameManager.InstantiatedGridObjects.Clear();
         }
     }
 
