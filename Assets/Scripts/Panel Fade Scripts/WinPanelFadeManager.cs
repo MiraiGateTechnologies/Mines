@@ -16,7 +16,7 @@ public class WinPanelFadeManager : MonoBehaviour
     private void Start()
     {
         winPanelCanvasGroup.alpha = 0; // Make the panel transparent
-       // checkHistoryButton.interactable = false; // Initially, the button is not interactable
+                                       // checkHistoryButton.interactable = false; // Initially, the button is not interactable
     }
 
     public void ShowWinPanel()
@@ -26,13 +26,15 @@ public class WinPanelFadeManager : MonoBehaviour
 
     private IEnumerator FadeInAndOut()
     {
-        UIManager.Instance.startButton.interactable = false;
+        /*AppearAndDisappearStartAndAutoBet(false);*/
         yield return FadeTo(1.0f); // Fade in
         yield return new WaitForSeconds(stayDuration);
         yield return FadeTo(0.0f); // Fade out
-        yield return new WaitForSeconds(stayDurationOfObjects);
+      /*  yield return new WaitForSeconds(stayDurationOfObjects);
         MinesManager.Instance.DestroyAllTheObjects();
-        UIManager.Instance.startButton.interactable = true;
+        AppearAndDisappearStartAndAutoBet(true);*/
+
+
     }
 
     private IEnumerator FadeTo(float targetAlpha)

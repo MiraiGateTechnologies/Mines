@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -130,7 +131,7 @@ public class AutoBetManager : MonoBehaviour
 
     private IEnumerator ClearSelectedIndexList()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.2f);
         Debug.Log("<color=red> BET ITEMS CLEARED</color>");
         IndexOfSelectedElements.Clear();
     }
@@ -174,6 +175,7 @@ public class AutoBetManager : MonoBehaviour
         }
         if (stopRequested)
         {
+
             MinesManager.Instance.InstantiateWithoutDelay();
 
             yield return new WaitForSeconds(1f);
@@ -261,7 +263,6 @@ public class AutoBetManager : MonoBehaviour
 
         }
 
-        //    selectedGridElements.Add(gridGameObject);
     }
     public void RemoveBetELements(GameObject gridGameObject, int index)
     {
@@ -270,6 +271,7 @@ public class AutoBetManager : MonoBehaviour
             gridGameObject.GetComponent<GridItem>().autoImage.gameObject.SetActive(false);
             gridGameObject.GetComponent<GridItem>().selectedForAuto = false;
             IndexOfSelectedElements.Remove(index);
+            Debug.Log("<color=pink>Bet item removed  </color>");
             UIManager.Instance.currentMultiplierIndex--;
             GameManager.Instance.diamondsOpened--;
             UIManager.Instance.CheckAndAdjustMultiplierPanelInAuto();
@@ -291,13 +293,16 @@ public class AutoBetManager : MonoBehaviour
 
     public void AddElementsSelectedToList()
     {
+        Debug.Log("<color=purple>Index of Selected Elements count = </color>" + IndexOfSelectedElements.Count);
         for (int i = 0; i < GameManager.Instance.minesManager.allGridItems.Count; i++)
         {
             if (IndexOfSelectedElements.Contains(i))
             {
+                Debug.Log("<color=yellow>Index of Selected Elements = </color>" +i);
                 if (GameManager.Instance.minesManager.allGridItems[i].isMine)
                 {
                     UIManager.Instance.minesBlastSound.Play();
+                    GameManager.Instance.minesManager.allGridItems[i].ChangeSpriteToHighlighted();
                 }
                 GameManager.Instance.minesManager.allGridItems[i].ChangeSpriteToHighlighted();
                 selectedGridElements.Add(GameManager.Instance.minesManager.allGridItems[i].gameObject);

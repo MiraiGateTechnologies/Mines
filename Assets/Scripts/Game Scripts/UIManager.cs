@@ -377,6 +377,9 @@ public class UIManager : MonoBehaviour
         MinesManager.Instance.DestroyAllTheObjects();
         GameManager.Instance.autoBet = false;
         ShowStartButton(true);
+
+        MinesManager.Instance.InstantiateGridObjects();
+        MinesManager.Instance.DisableAllObjects();
         //ResetToDefaultMultipliers();
     }
 
@@ -671,7 +674,8 @@ public class UIManager : MonoBehaviour
         bettingManager.ResetMultipliers(); // Reset the multipliers
         ResetMultiplierPanelsToDefault(); // Reset UI panels to default
         UpdateMultiplierPanels(); // Update the UI to reflect the reset state
-
+        MinesManager.Instance.InstantiateGridObjects();
+        MinesManager.Instance.DisableAllObjects();
     }
     public void OnAutoWin()
     {

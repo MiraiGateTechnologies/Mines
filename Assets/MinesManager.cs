@@ -21,6 +21,11 @@ public class MinesManager : MonoBehaviour
     {
         Instance = this;
     }
+    private void Start()
+    {
+        InstantiateGridObjects();
+        DisableAllObjects();
+    }
 
     #region Instantiating Grid Items and Placing them randomly
 
