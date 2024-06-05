@@ -147,7 +147,7 @@ public class UIManager : MonoBehaviour
 
     public int NumberOfInstantiatedPanels = 5;
     #endregion References 
-
+      
 
     #region Properties
 
@@ -458,7 +458,7 @@ public class UIManager : MonoBehaviour
         if (riskPercentageText != null)
         {
             int totalProfiles = 25;
-            float riskPercentage = ((float)CatfishManager.Instance.maxCatfishCount / totalProfiles) * 100;
+            float riskPercentage = ((float)MinesManager.Instance.totalMines / totalProfiles) * 100;
             riskPercentageText.text = $"{riskPercentage.ToString("0.00")}%";
         }
     }
@@ -610,9 +610,16 @@ public class UIManager : MonoBehaviour
         autoBetButton.interactable = show;
     }
     ///////////////////  Start - Cancel - Cashout Btns on-click methods  ////////////////////
+
+    public void checkStartFunction()
+    {
+        APIManager.Instance.betInsert(BettingManager.Instance.betAmount, MinesManager.Instance.totalMines);
+
+    }
     public void OnStartButtonPressed() //To be called when Start button is clicked
     {
         MinesManager.Instance.DestroyAllTheObjects();
+        
         // Play the button click sound
         if (startButtonSound != null)
         {
