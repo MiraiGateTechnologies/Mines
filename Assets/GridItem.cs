@@ -48,7 +48,6 @@ public class GridItem : MonoBehaviour
 /*            autoImage.gameObject.SetActive(true);*/
             GameManager.Instance.autoBetManager.AddBetElements(this.gameObject,GameManager.InstantiatedGridObjects.IndexOf(this.gameObject));
 
-
         }
     }
 

@@ -15,7 +15,7 @@ public class MinesManager : MonoBehaviour
     public List<GridItem> allGridItems = new List<GridItem>();
     public static MinesManager Instance;
     public static float multiplierIncrement=0.08f;
-    public float winningsInManual = 0;
+    public double winningsInManual = 0;
 
     private void Awake()
     {
@@ -141,11 +141,10 @@ public class MinesManager : MonoBehaviour
         UIManager.Instance.CheckAndAdjustMultiplierPanels();
         UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
 
-        float baseMultiplier = BettingManager.Instance.minesMultipliers[totalMines];
-        float incrementedMultiplier = baseMultiplier + (GameManager.Instance.diamondsOpened-1) * multiplierIncrement;
-        winningsInManual = incrementedMultiplier;
-        float winnings = BettingManager.Instance.betAmount * incrementedMultiplier;
-        Debug.Log("Multiplier Current = " + incrementedMultiplier);
+
+
+        winningsInManual = BettingManager.Instance.nextMultipliers[GameManager.Instance.diamondsOpened-1];
+        double winnings = BettingManager.Instance.betAmount * winningsInManual;
 
         BettingManager.Instance.UpdateToBeAddedAmntText(winnings);
         if(GameManager.Instance.diamondsOpened==(25-totalMines))
@@ -170,6 +169,14 @@ public class MinesManager : MonoBehaviour
        foreach(var items in allGridItems)
         {
             items.GetComponent<Button>().interactable = false;
+        }
+    }
+
+    public void EnabledAllObjects()
+    {
+        foreach (var items in allGridItems)
+        {
+            items.GetComponent<Button>().interactable = true;
         }
     }
 

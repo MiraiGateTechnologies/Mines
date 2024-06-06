@@ -156,9 +156,9 @@ public class BettingManager : MonoBehaviour
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     
     ///// Updates the total winnings and the display of potential winnings
-    public void UpdateToBeAddedAmntText(float amount)
+    public void UpdateToBeAddedAmntText(double amount)
     {
-        totalWinnings = amount; 
+        totalWinnings = (float)amount;
         Debug.Log("Total Winnings = " + totalWinnings);
         toBeAddedAmntText.text = totalWinnings.ToString("0.00");
     }
@@ -203,7 +203,6 @@ public class BettingManager : MonoBehaviour
     {
         int currentMinesCount = GameManager.Instance.totalMinesCount;
         Debug.Log(currentMinesCount);
-        float baseMultiplier = minesMultipliers[currentMinesCount];
         nextMultipliers.Clear(); // Clear the list before adding new values
 
 

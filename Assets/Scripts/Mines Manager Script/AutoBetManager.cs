@@ -9,7 +9,7 @@ public class AutoBetManager : MonoBehaviour
     public static bool stopRequested;
     int numberOfRounds;
     bool infiniteRounds = false;
-    public float winnings;
+    public double winnings;
     public bool stopAtAnyWin = false;
     public bool autoBetStarted = false;
     public bool roundWinStatus = true;
@@ -68,8 +68,6 @@ public class AutoBetManager : MonoBehaviour
     {
         UIManager.Instance.disableUIWhenGameStarted.Invoke();
         GameManager.Instance.minesManager.DestroyAllTheObjects();
-
-
 
         UIManager.Instance.AutoBetUiInteractableSet(false);
         roundWinStatus = true;
@@ -132,7 +130,7 @@ public class AutoBetManager : MonoBehaviour
     private IEnumerator ClearSelectedIndexList()
     {
         yield return new WaitForSeconds(1.2f);
-        Debug.Log("<color=red> BET ITEMS CLEARED</color>");
+
         IndexOfSelectedElements.Clear();
     }
 
@@ -141,15 +139,8 @@ public class AutoBetManager : MonoBehaviour
     #region Bet Iterations
     private IEnumerator IndefiniteAutoBetRoutine()
     {
-        if (BettingManager.Instance.balanceAmount <= 0)
-        {
-            MinesManager.Instance.InstantiateWithoutDelay();
-            ShowInsufficiecntBalanceMessage();
-           StopAutoBet();
-        }
 
-
-        while (!stopRequested && BettingManager.Instance.betAmount <= BettingManager.Instance.balanceAmount)
+        while (!stopRequested && CheckIfBetAffordable())
         {
             BettingManager.Instance.balanceAmount -= BettingManager.Instance.betAmount;
             UIManager.Instance.manualButton.interactable = false;
@@ -160,13 +151,12 @@ public class AutoBetManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.4f); // Adjust time as needed
             MinesManager.Instance.ShowAllItems();//Reveal all the objects
-            
+
             AddElementsSelectedToList();
 
             yield return new WaitForSeconds(1f); // Adjust time as needed
 
             WinOrLoseCalculator();// reveal all the objects and calculate total winnings
-            Debug.Log("<color=blue> Iteration</color>");
             yield return new WaitForSeconds(1.2f); // Adjust time as needed
             GameManager.Instance.minesManager.DestroyAllTheObjects();
             GameManager.InstantiatedGridObjects.Clear();
@@ -177,64 +167,68 @@ public class AutoBetManager : MonoBehaviour
         {
 
             MinesManager.Instance.InstantiateWithoutDelay();
-
             yield return new WaitForSeconds(1f);
             UIManager.Instance.manualButton.interactable = true;
         }
 
-        if (BettingManager.Instance.betAmount > BettingManager.Instance.balanceAmount)
+        if (!CheckIfBetAffordable())
         {
-            ShowInsufficiecntBalanceMessage();
-            MinesManager.Instance.InstantiateWithoutDelay();
-           StopAutoBet();
+            StopBetDueToInsufficientBalance();
         }
 
     }
 
     private IEnumerator FixedAutoBetRoutine(int numberOfRounds)
     {
-        if (BettingManager.Instance.balanceAmount < 0)
+
+        for (int i = 0; i < numberOfRounds && !stopRequested && CheckIfBetAffordable(); i++)
+
         {
-            MinesManager.Instance.InstantiateWithoutDelay();
+            BettingManager.Instance.balanceAmount -= BettingManager.Instance.betAmount;
+            UIManager.Instance.manualButton.interactable = false;
+            GameManager.Instance.minesManager.InstantiateWithoutDelay();//Instantiate elements
+            MinesManager.Instance.DisableAllObjects();
+
+            yield return new WaitForSeconds(0.4f); // Adjust time as needed
+
+            AddElementsSelectedToList();
+            MinesManager.Instance.ShowAllItems();//Reveal all the objects
+
+            yield return new WaitForSeconds(1f); // Adjust time as needed
+
+            WinOrLoseCalculator();// calculate total winnings
+
+
+            yield return new WaitForSeconds(1.2f); // Adjust time as needed
+
+            GameManager.Instance.minesManager.DestroyAllTheObjects();
+            selectedGridElements.Clear();
+            GameManager.InstantiatedGridObjects.Clear();
+        }
+        if (!CheckIfBetAffordable())
+        {
             ShowInsufficiecntBalanceMessage();
-           StopAutoBet();
-        }
-        else if (BettingManager.Instance.betAmount <= BettingManager.Instance.balanceAmount)
-        {
-
-            for (int i = 0; i < numberOfRounds && !stopRequested && (BettingManager.Instance.betAmount <= BettingManager.Instance.balanceAmount); i++)
-
-            {
-                BettingManager.Instance.balanceAmount -= BettingManager.Instance.betAmount;
-                UIManager.Instance.manualButton.interactable = false;
-                GameManager.Instance.minesManager.InstantiateWithoutDelay();//Instantiate elements
-                MinesManager.Instance.DisableAllObjects();
-                yield return new WaitForSeconds(0.4f); // Adjust time as needed
-
-                AddElementsSelectedToList();
-                MinesManager.Instance.ShowAllItems();//Reveal all the objects
-
-                yield return new WaitForSeconds(1f); // Adjust time as needed
-
-                WinOrLoseCalculator();// calculate total winnings
-
-
-                yield return new WaitForSeconds(1f); // Adjust time as needed
-                GameManager.Instance.minesManager.DestroyAllTheObjects();
-                selectedGridElements.Clear();
-                GameManager.InstantiatedGridObjects.Clear();
-            }
-            if (BettingManager.Instance.betAmount > BettingManager.Instance.balanceAmount)
-            {
-                ShowInsufficiecntBalanceMessage();
-            }
-
-           StopAutoBet();
-            MinesManager.Instance.InstantiateWithoutDelay();
-            yield return new WaitForSeconds(1f);
-            UIManager.Instance.manualButton.interactable = true;
         }
 
+        StopAutoBet();
+        MinesManager.Instance.InstantiateWithoutDelay();
+        yield return new WaitForSeconds(1f);
+        UIManager.Instance.manualButton.interactable = true;
+
+    }
+
+    bool CheckIfBetAffordable()
+    {
+       if( BettingManager.Instance.betAmount <= BettingManager.Instance.balanceAmount && BettingManager.Instance.balanceAmount>0)
+            return true;
+       else return false;
+    }
+    
+    void StopBetDueToInsufficientBalance()
+    {
+        ShowInsufficiecntBalanceMessage();
+        MinesManager.Instance.InstantiateWithoutDelay();
+        StopAutoBet();
     }
 
     #endregion Bet Iterations
@@ -255,11 +249,7 @@ public class AutoBetManager : MonoBehaviour
 
             UIManager.Instance.HighlightMultiplierPanel(UIManager.Instance.currentMultiplierIndex);
 
-
-            float baseMultiplier = BettingManager.Instance.minesMultipliers[MinesManager.Instance.totalMines];
-            float incrementedMultiplier = baseMultiplier + (GameManager.Instance.diamondsOpened - 1) * MinesManager.multiplierIncrement;
-            winnings = incrementedMultiplier;
-            Debug.Log("Current Multiplier = " + incrementedMultiplier);
+            winnings = BettingManager.Instance.nextMultipliers[GameManager.Instance.diamondsOpened - 1];
 
         }
 
@@ -271,7 +261,7 @@ public class AutoBetManager : MonoBehaviour
             gridGameObject.GetComponent<GridItem>().autoImage.gameObject.SetActive(false);
             gridGameObject.GetComponent<GridItem>().selectedForAuto = false;
             IndexOfSelectedElements.Remove(index);
-            Debug.Log("<color=pink>Bet item removed  </color>");
+
             UIManager.Instance.currentMultiplierIndex--;
             GameManager.Instance.diamondsOpened--;
             UIManager.Instance.CheckAndAdjustMultiplierPanelInAuto();
@@ -281,24 +271,18 @@ public class AutoBetManager : MonoBehaviour
                 UIManager.Instance.startAutoPlay.interactable = false;
                 GameManager.Instance.gameStarted = false;
             }
-
-            float baseMultiplier = BettingManager.Instance.minesMultipliers[MinesManager.Instance.totalMines];
-            Debug.Log("<color:Green>Base Multiplier = </color>" + baseMultiplier);
-            float decrementMultiplier = baseMultiplier - (GameManager.Instance.diamondsOpened - 1) * MinesManager.multiplierIncrement;
-            Debug.Log("<color:REd>decrement Multiplier  = </color>" + decrementMultiplier);
-            winnings = decrementMultiplier;
+            if(GameManager.Instance.diamondsOpened>0)
+                winnings = BettingManager.Instance.nextMultipliers[GameManager.Instance.diamondsOpened-1];
 
         }
     }
 
     public void AddElementsSelectedToList()
     {
-        Debug.Log("<color=purple>Index of Selected Elements count = </color>" + IndexOfSelectedElements.Count);
         for (int i = 0; i < GameManager.Instance.minesManager.allGridItems.Count; i++)
         {
             if (IndexOfSelectedElements.Contains(i))
             {
-                Debug.Log("<color=yellow>Index of Selected Elements = </color>" +i);
                 if (GameManager.Instance.minesManager.allGridItems[i].isMine)
                 {
                     UIManager.Instance.minesBlastSound.Play();
@@ -364,7 +348,7 @@ public class AutoBetManager : MonoBehaviour
 
     bool CalculateWinAmount()
     {
-        winAmount = BettingManager.Instance.betAmount * winnings;
+        winAmount = BettingManager.Instance.betAmount * (float)winnings;
         foreach (GameObject items in selectedGridElements)
         {
             if (items.GetComponent<GridItem>().isMine)

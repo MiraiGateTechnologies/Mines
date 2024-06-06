@@ -24,18 +24,18 @@ public class UIManager : MonoBehaviour
     public Button cancelButton;
     public Button cashOutButton;
 
-    public Button increaseCatfishCountButton;
-    public Button decreaseCatfishCountButton;
+    public Button increaseMinesCountButton;
+    public Button decreaseMinesCountButton;
 
     public Button increseBetAmntButton;
     public Button decreaseBetAmntButton;
     public Button minbetAmntButton;
     public Button maxbetAmntButton;
 
-    public Button setCatfishTo3Button;
-    public Button setCatfishTo5Button;
-    public Button setCatfishTo10Button;
-    public Button setCatfishTo20Button;
+    public Button setMinesTo3Button;
+    public Button setMinesTo5Button;
+    public Button setMinesTo10Button;
+    public Button setMinesTo20Button;
 
     public Button aboutButton;
     public Button about_crossButton;
@@ -47,7 +47,7 @@ public class UIManager : MonoBehaviour
     public GameObject SoundOnBtnGameObj;
 
     [Header("3. Texts")]
-    public TextMeshProUGUI maxCatfishCountText;
+    public TextMeshProUGUI maxMinesCountText;
     public TextMeshProUGUI swipeCountText;
     public TextMeshProUGUI riskPercentageText;
     public TextMeshProUGUI winPercentText;
@@ -179,7 +179,7 @@ public class UIManager : MonoBehaviour
 
 
         disableUIWhenGameStarted += DisableBetAmntButtons;
-        disableUIWhenGameStarted += DisableCatfishDirectSetButtons;
+        disableUIWhenGameStarted += DisableMinesDirectSetButtons;
         disableUIWhenGameStarted += DisableMinesCountButtons;
 
         EnableUIWhenGameEnded += EnableMinesCountButtons;
@@ -241,6 +241,8 @@ public class UIManager : MonoBehaviour
         {
             WhenLosingResetPressed();
         });
+        startButton.onClick.AddListener(() =>OnStartButtonPressed());
+
         whenWinningIncreaseBy.onValueChanged.AddListener(value =>
         {
             float.TryParse(value, out IncreaseWhenWinningValue);
@@ -257,10 +259,10 @@ public class UIManager : MonoBehaviour
                 GameManager.Instance.autoBetManager.p_StopAtWinClicked = false;
         });
         cashOutButton.onClick.AddListener(() => OnCashOutButtonPressed());
-        setCatfishTo3Button.onClick.AddListener(() => SetMinesCount(3));
-        setCatfishTo5Button.onClick.AddListener(() => SetMinesCount(5));
-        setCatfishTo10Button.onClick.AddListener(() => SetMinesCount(10));
-        setCatfishTo20Button.onClick.AddListener(() => SetMinesCount(20));
+        setMinesTo3Button.onClick.AddListener(() => SetMinesCount(3));
+        setMinesTo5Button.onClick.AddListener(() => SetMinesCount(5));
+        setMinesTo10Button.onClick.AddListener(() => SetMinesCount(10));
+        setMinesTo20Button.onClick.AddListener(() => SetMinesCount(20));
     }
     #endregion Initialize On Click Buttons Listeners
 
@@ -292,9 +294,6 @@ public class UIManager : MonoBehaviour
         startAutoPlay.interactable = false;
         MinesManager.Instance.InstantiateGridObjects();
 
-        /*        DisableMinesCountButtons();
-                DisableBetAmntButtons();
-                DisableCatfishDirectSetButtons();*/
 
         UpdateRiskPercentageDisplay();
 
@@ -313,6 +312,7 @@ public class UIManager : MonoBehaviour
             if (balanceFadeManager != null)
             {
                 balanceFadeManager.ShowInsufficientBalancePanel();
+                MinesManager.Instance.DestroyAllTheObjects();
                 MinesManager.Instance.InstantiateWithoutDelay();
                GameManager.Instance.autoBetManager.StopAutoBet();
             }
@@ -475,7 +475,7 @@ public class UIManager : MonoBehaviour
     #endregion Risk Percentage Display Functions
 
 
-    #region Catfish Count Functions
+    #region Mines Count Functions
     ///////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////      Mines Count Funct     /////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -531,34 +531,34 @@ public class UIManager : MonoBehaviour
     }
     void UpdateMaxMinesCountDisplay()
     {
-        maxCatfishCountText.text = $"{GameManager.Instance.totalMinesCount}";
+        maxMinesCountText.text = $"{GameManager.Instance.totalMinesCount}";
 
-        increaseCatfishCountButton.interactable = GameManager.Instance.totalMinesCount < 24;
-        decreaseCatfishCountButton.interactable = GameManager.Instance.totalMinesCount > 2;
+        increaseMinesCountButton.interactable = GameManager.Instance.totalMinesCount < 24;
+        decreaseMinesCountButton.interactable = GameManager.Instance.totalMinesCount > 2;
     }
     public void DisableMinesCountButtons()
     {
-        increaseCatfishCountButton.interactable = false;
-        decreaseCatfishCountButton.interactable = false;
+        increaseMinesCountButton.interactable = false;
+        decreaseMinesCountButton.interactable = false;
     }
     public void EnableMinesCountButtons()
     {
-        increaseCatfishCountButton.interactable = true;
-        decreaseCatfishCountButton.interactable = true;
+        increaseMinesCountButton.interactable = true;
+        decreaseMinesCountButton.interactable = true;
     }
-    void DisableCatfishDirectSetButtons()
+    void DisableMinesDirectSetButtons()
     {
-        setCatfishTo3Button.interactable = false;
-        setCatfishTo5Button.interactable = false;
-        setCatfishTo10Button.interactable = false;
-        setCatfishTo20Button.interactable = false;
+        setMinesTo3Button.interactable = false;
+        setMinesTo5Button.interactable = false;
+        setMinesTo10Button.interactable = false;
+        setMinesTo20Button.interactable = false;
     }
     public void EnableMinesDirectSetButtons()
     {
-        setCatfishTo3Button.interactable = true;
-        setCatfishTo5Button.interactable = true;
-        setCatfishTo10Button.interactable = true;
-        setCatfishTo20Button.interactable = true;
+        setMinesTo3Button.interactable = true;
+        setMinesTo5Button.interactable = true;
+        setMinesTo10Button.interactable = true;
+        setMinesTo20Button.interactable = true;
     }
     #endregion Catfish Count Functions
 
@@ -616,7 +616,7 @@ public class UIManager : MonoBehaviour
 
     public void checkStartFunction()
     {
-        APIManager.Instance.betInsert(BettingManager.Instance.betAmount, MinesManager.Instance.totalMines);
+       // APIManager.Instance.betInsert(BettingManager.Instance.betAmount, MinesManager.Instance.totalMines);
 
     }
     public void OnStartButtonPressed() //To be called when Start button is clicked
@@ -655,7 +655,7 @@ public class UIManager : MonoBehaviour
 
         DisableMinesCountButtons();
         DisableBetAmntButtons();
-        DisableCatfishDirectSetButtons();
+        DisableMinesDirectSetButtons();
 
         UpdateRiskPercentageDisplay();
 
@@ -689,7 +689,7 @@ public class UIManager : MonoBehaviour
         cashOutSound.Play();
         bettingManager.UpdateToBeAddedAmntText(GameManager.Instance.autoBetManager.winAmount);
         winPercentText.text = "+" + CalculateWinPercent(GameManager.Instance.autoBetManager.winAmount, bettingManager.betAmount)+"%";
-        lastMultiplierText.text = GameManager.Instance.autoBetManager.winnings.ToString();
+        lastMultiplierText.text ="x"+ GameManager.Instance.autoBetManager.winnings.ToString("0.00");
         bettingManager.CashOutWinnings();
         UpdateAndShowWinPanel();
 /*
@@ -708,7 +708,7 @@ public class UIManager : MonoBehaviour
         MinesManager.Instance.DisableAllObjects();
         cashOutSound.Play();
         winPercentText.text= "+"+CalculateWinPercent(bettingManager.totalWinnings, bettingManager.betAmount) +"%";
-        lastMultiplierText.text ="x" +MinesManager.Instance.winningsInManual.ToString();
+        lastMultiplierText.text ="x" +MinesManager.Instance.winningsInManual.ToString("0.00");
 
         GameManager.Instance.ResetMinesTracker();
         GameManager.Instance.gameStarted = false;

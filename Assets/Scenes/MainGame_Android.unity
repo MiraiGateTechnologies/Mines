@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 34787874}
   - component: {fileID: 34787873}
   m_Layer: 5
-  m_Name: Catfish Txt
+  m_Name: Mines Txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -969,7 +969,7 @@ GameObject:
   - component: {fileID: 131058803}
   - component: {fileID: 131058802}
   m_Layer: 5
-  m_Name: Inc Catfish Amnt Btn
+  m_Name: Inc Mines  Amnt Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1718,7 +1718,7 @@ GameObject:
   - component: {fileID: 241348455}
   - component: {fileID: 241348454}
   m_Layer: 5
-  m_Name: Cattfish amount Panel
+  m_Name: Mines amount Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4245,7 +4245,7 @@ GameObject:
   - component: {fileID: 536415025}
   - component: {fileID: 536415024}
   m_Layer: 5
-  m_Name: Catfish Amt_Num Txt
+  m_Name: Mines Amt_Num Txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4380,7 +4380,7 @@ GameObject:
   - component: {fileID: 565151375}
   - component: {fileID: 565151374}
   m_Layer: 5
-  m_Name: Dec Catfish Amnt Btn
+  m_Name: Dec MinesAmnt Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10520,7 +10520,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1317984348
 Transform:
   m_ObjectHideFlags: 0
@@ -11081,23 +11081,23 @@ MonoBehaviour:
   startButton: {fileID: 1250388487}
   cancelButton: {fileID: 735414270}
   cashOutButton: {fileID: 1769106545}
-  increaseCatfishCountButton: {fileID: 131058802}
-  decreaseCatfishCountButton: {fileID: 565151374}
+  increaseMinesCountButton: {fileID: 131058802}
+  decreaseMinesCountButton: {fileID: 565151374}
   increseBetAmntButton: {fileID: 1284350152}
   decreaseBetAmntButton: {fileID: 994542912}
   minbetAmntButton: {fileID: 674751773}
   maxbetAmntButton: {fileID: 1985003090}
-  setCatfishTo3Button: {fileID: 1230459660}
-  setCatfishTo5Button: {fileID: 1441090991}
-  setCatfishTo10Button: {fileID: 580446789}
-  setCatfishTo20Button: {fileID: 706875438}
+  setMinesTo3Button: {fileID: 1230459660}
+  setMinesTo5Button: {fileID: 1441090991}
+  setMinesTo10Button: {fileID: 580446789}
+  setMinesTo20Button: {fileID: 706875438}
   aboutButton: {fileID: 0}
   about_crossButton: {fileID: 0}
   likeButtonGameObj: {fileID: 0}
   dislikeButtonGameObj: {fileID: 0}
   SoundOffBtnGameObj: {fileID: 0}
   SoundOnBtnGameObj: {fileID: 0}
-  maxCatfishCountText: {fileID: 536415024}
+  maxMinesCountText: {fileID: 536415024}
   swipeCountText: {fileID: 0}
   riskPercentageText: {fileID: 0}
   winPercentText: {fileID: 1878764928}
